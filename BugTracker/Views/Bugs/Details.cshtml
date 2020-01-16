@@ -3,9 +3,10 @@
 @{
     ViewBag.Title = "Details";
 }
-<!--HANGI DETAYLARI GOSTERIYO BAK AMK-->
+<!--Display değişecek-->
 <h2>Details</h2>
 <div>
+    <!--Display image-->
     <h4>Bug</h4>
     <hr />
     <dl class="dl-horizontal">
@@ -44,25 +45,41 @@
         <dt>
             @Html.DisplayNameFor(model => model.fix_time)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.fix_time)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Assignee1.email)
-        </dt>
+        @if (!ViewBag.msg.Equals("user") && !ViewBag.msg.Equals("no"))
+        {
 
+            <dt>
+                @Html.DisplayNameFor(model => model.Assignee1.email)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Assignee1.email)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.User.email)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.User.email)
+            </dd>
+        }
+
+        <dt>
+            @Html.DisplayNameFor(model => model.description)
+        </dt>
         <dd>
-            @Html.DisplayFor(model => model.Assignee1.email)
+            @Html.DisplayFor(model => model.description)
         </dd>
-
         <dt>
-            @Html.DisplayNameFor(model => model.User.email)
+            @Html.DisplayNameFor(model => model.fix_description)
         </dt>
-
         <dd>
-            @Html.DisplayFor(model => model.User.email)
+            @Html.DisplayFor(model => model.fix_description)
         </dd>
 
     </dl>

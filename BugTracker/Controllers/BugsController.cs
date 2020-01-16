@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using BugTracker.Models;
-
+//TODO image değiştirirken veya eklerken bind içerisinde postta gelebiliyor mu bir bak
 namespace BugTracker.Controllers
 {
     public class BugsController : Controller
@@ -111,6 +111,7 @@ namespace BugTracker.Controllers
         [HttpPost]
         public async Task<ActionResult> Create([Bind(Include = "title,severity, version")] Bug bug, string prevPage)
         {
+            //TODO include will change 
             ViewBag.urlPrev = prevPage;
             CheckCk();
             ViewBag.msg = GetTypeUsr();
@@ -149,6 +150,8 @@ namespace BugTracker.Controllers
             {
                 return HttpNotFound();
             }
+            //Burada bi sıkıntı var submitter gibi olması gerekiyor assigneenin de? büyük ihtimalle dropdown list için yapılmış
+            // değişmemesi gerekiyor? admin değiştirirken burdan seçebilir kimin atanacağını.
             List<SelectListItem> emails = new List<SelectListItem>();
             foreach (var item in await _db.Assignee.ToListAsync())
             {
@@ -165,6 +168,7 @@ namespace BugTracker.Controllers
         [HttpPost]
         public async Task<ActionResult> Edit([Bind(Include = "title,submitter,assignee,severity,state,submit_time,version,fix_time")] Bug bug, string prevPage)
         {
+            //TODO include will change 
             ViewBag.urlPrev = prevPage;
             CheckCk();
             ViewBag.msg = GetTypeUsr();
