@@ -1,0 +1,302 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="BugTrackerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Admin">
+          <Key>
+            <PropertyRef Name="email" />
+          </Key>
+          <Property Name="email" Type="nvarchar" MaxLength="254" Nullable="false" />
+          <Property Name="password" Type="nvarchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Assignee">
+          <Key>
+            <PropertyRef Name="email" />
+          </Key>
+          <Property Name="email" Type="nvarchar" MaxLength="254" Nullable="false" />
+          <Property Name="password" Type="nvarchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Bug">
+          <Key>
+            <PropertyRef Name="title" />
+          </Key>
+          <Property Name="title" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="submitter" Type="nvarchar" MaxLength="254" Nullable="false" />
+          <Property Name="assignee" Type="nvarchar" MaxLength="254" />
+          <Property Name="severity" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="state" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="submit_time" Type="datetime" Nullable="false" />
+          <Property Name="version" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="fix_time" Type="datetime" />
+          <Property Name="description" Type="nvarchar" MaxLength="4000" Nullable="false" />
+          <Property Name="fix_description" Type="nvarchar" MaxLength="4000" />
+        </EntityType>
+        <EntityType Name="Image">
+          <Key>
+            <PropertyRef Name="title" />
+          </Key>
+          <Property Name="title" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="ContentType" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Data" Type="varbinary" MaxLength="8000" Nullable="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="email" />
+          </Key>
+          <Property Name="email" Type="nvarchar" MaxLength="254" Nullable="false" />
+          <Property Name="password" Type="nvarchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Bug_Assignee">
+          <End Role="Assignee" Type="Self.Assignee" Multiplicity="0..1" />
+          <End Role="Bug" Type="Self.Bug" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Assignee">
+              <PropertyRef Name="email" />
+            </Principal>
+            <Dependent Role="Bug">
+              <PropertyRef Name="assignee" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Bug_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Bug" Type="Self.Bug" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="email" />
+            </Principal>
+            <Dependent Role="Bug">
+              <PropertyRef Name="submitter" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Image_Bug">
+          <End Role="Bug" Type="Self.Bug" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Image" Type="Self.Image" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Bug">
+              <PropertyRef Name="title" />
+            </Principal>
+            <Dependent Role="Image">
+              <PropertyRef Name="title" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BugTrackerModelStoreContainer">
+          <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Assignee" EntityType="Self.Assignee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Bug" EntityType="Self.Bug" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Image" EntityType="Self.Image" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Bug_Assignee" Association="Self.FK_Bug_Assignee">
+            <End Role="Assignee" EntitySet="Assignee" />
+            <End Role="Bug" EntitySet="Bug" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Bug_User" Association="Self.FK_Bug_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Bug" EntitySet="Bug" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Image_Bug" Association="Self.FK_Image_Bug">
+            <End Role="Bug" EntitySet="Bug" />
+            <End Role="Image" EntitySet="Image" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BugTrackerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Admin">
+          <Key>
+            <PropertyRef Name="email" />
+          </Key>
+          <Property Name="email" Type="String" MaxLength="254" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Assignee">
+          <Key>
+            <PropertyRef Name="email" />
+          </Key>
+          <Property Name="email" Type="String" MaxLength="254" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Bug" Relationship="Self.FK_Bug_Assignee" FromRole="Assignee" ToRole="Bug" />
+        </EntityType>
+        <EntityType Name="Bug">
+          <Key>
+            <PropertyRef Name="title" />
+          </Key>
+          <Property Name="title" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="submitter" Type="String" MaxLength="254" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="assignee" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
+          <Property Name="severity" Type="String" MaxLength="8" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="state" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="submit_time" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="version" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="fix_time" Type="DateTime" Precision="3" />
+          <Property Name="description" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="fix_description" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Assignee1" Relationship="Self.FK_Bug_Assignee" FromRole="Bug" ToRole="Assignee" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Bug_User" FromRole="Bug" ToRole="User" />
+          <NavigationProperty Name="Image" Relationship="Self.FK_Image_Bug" FromRole="Bug" ToRole="Image" />
+        </EntityType>
+        <EntityType Name="Image">
+          <Key>
+            <PropertyRef Name="title" />
+          </Key>
+          <Property Name="title" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ContentType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Data" Type="Binary" MaxLength="8000" FixedLength="false" Nullable="false" />
+          <NavigationProperty Name="Bug" Relationship="Self.FK_Image_Bug" FromRole="Image" ToRole="Bug" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="email" />
+          </Key>
+          <Property Name="email" Type="String" MaxLength="254" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Bug" Relationship="Self.FK_Bug_User" FromRole="User" ToRole="Bug" />
+        </EntityType>
+        <Association Name="FK_Bug_Assignee">
+          <End Role="Assignee" Type="Self.Assignee" Multiplicity="0..1" />
+          <End Role="Bug" Type="Self.Bug" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Assignee">
+              <PropertyRef Name="email" />
+            </Principal>
+            <Dependent Role="Bug">
+              <PropertyRef Name="assignee" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Bug_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Bug" Type="Self.Bug" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="email" />
+            </Principal>
+            <Dependent Role="Bug">
+              <PropertyRef Name="submitter" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Image_Bug">
+          <End Role="Bug" Type="Self.Bug" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Image" Type="Self.Image" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Bug">
+              <PropertyRef Name="title" />
+            </Principal>
+            <Dependent Role="Image">
+              <PropertyRef Name="title" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BugTrackerEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Admin" EntityType="Self.Admin" />
+          <EntitySet Name="Assignee" EntityType="Self.Assignee" />
+          <EntitySet Name="Bug" EntityType="Self.Bug" />
+          <EntitySet Name="Image" EntityType="Self.Image" />
+          <EntitySet Name="User" EntityType="Self.User" />
+          <AssociationSet Name="FK_Bug_Assignee" Association="Self.FK_Bug_Assignee">
+            <End Role="Assignee" EntitySet="Assignee" />
+            <End Role="Bug" EntitySet="Bug" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Bug_User" Association="Self.FK_Bug_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Bug" EntitySet="Bug" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Image_Bug" Association="Self.FK_Image_Bug">
+            <End Role="Bug" EntitySet="Bug" />
+            <End Role="Image" EntitySet="Image" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BugTrackerModelStoreContainer" CdmEntityContainer="BugTrackerEntities">
+          <EntitySetMapping Name="Admin">
+            <EntityTypeMapping TypeName="BugTrackerModel.Admin">
+              <MappingFragment StoreEntitySet="Admin">
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="password" ColumnName="password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Assignee">
+            <EntityTypeMapping TypeName="BugTrackerModel.Assignee">
+              <MappingFragment StoreEntitySet="Assignee">
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="password" ColumnName="password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Bug">
+            <EntityTypeMapping TypeName="BugTrackerModel.Bug">
+              <MappingFragment StoreEntitySet="Bug">
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="submitter" ColumnName="submitter" />
+                <ScalarProperty Name="assignee" ColumnName="assignee" />
+                <ScalarProperty Name="severity" ColumnName="severity" />
+                <ScalarProperty Name="state" ColumnName="state" />
+                <ScalarProperty Name="submit_time" ColumnName="submit_time" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="fix_time" ColumnName="fix_time" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="fix_description" ColumnName="fix_description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Image">
+            <EntityTypeMapping TypeName="BugTrackerModel.Image">
+              <MappingFragment StoreEntitySet="Image">
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ContentType" ColumnName="ContentType" />
+                <ScalarProperty Name="Data" ColumnName="Data" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User">
+            <EntityTypeMapping TypeName="BugTrackerModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="password" ColumnName="password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

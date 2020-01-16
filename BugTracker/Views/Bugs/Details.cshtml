@@ -1,0 +1,78 @@
+﻿@model BugTracker.Models.Bug
+
+@{
+    ViewBag.Title = "Details";
+}
+<!--HANGI DETAYLARI GOSTERIYO BAK AMK-->
+<h2>Details</h2>
+<div>
+    <h4>Bug</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.severity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.severity)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.state)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.state)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.submit_time)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.submit_time)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.version)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.version)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.fix_time)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.fix_time)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Assignee1.email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Assignee1.email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.User.email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.email)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    <ul>
+        @if (!ViewBag.msg.Equals("no") && !ViewBag.msg.Equals("user"))
+        {
+            <li>  @Html.ActionLink("Edit", "Edit", new { id = Model.title, prevPage = Request.Url.ToString() })</li>
+        }
+        <li><a href="@ViewBag.urlPrev">Previous Page</a></li>
+    </ul>
+</p>

@@ -1,0 +1,150 @@
+﻿@model PaginatedList<BugTracker.Models.Bug>
+
+@{
+    ViewBag.Title = "Index";
+
+}
+
+<h2>Index</h2>
+<h1>@ViewBag.msg</h1>
+<!--DEBUG INFO-->
+<!--Parameters: sortOrder, sortColumn, currentFilter, pageNumber, searchString, filter-->
+<!--
+    sortOrder: ascending or descending,
+    sortColumn: column that is referenced for comparison,
+    currentFilter: last entered search string,
+    pageNumber: current page index (base 1)
+    searchString: entered search string,
+    filter: search scope; for example, if version is checked from radio buttons filter will be "version" meaning that search scope is changed
+    to version
+-->
+
+<h2>
+    SortOrder: @ViewData["order"], SortColumn: @ViewData["sortColumn"], Search: @ViewData["searchString"], Filter: @ViewData["filter"],
+    CurrentF: @ViewData["CurrentFilter"]
+</h2>
+<!--Display Create for users except admin and assignee types-->
+<p>
+    @if (ViewBag.msg.Equals("user"))
+    {
+        @Html.ActionLink("Create New", "Create",new {prevPage=Request.Url.ToString() })
+    }
+</p>
+<!--Search Bar-->
+@using (Html.BeginForm("Index", "Bugs"))
+{
+    <!--sortOrder acts like a switch; for example, to keep a view in ascending order while changing search strings controller has to receive
+        the opposite value of ViewData["order"]-->
+    <input type="hidden" name="sortOrder" value="@(ViewData["order"].Equals("asc") ? "desc" : "asc")" />
+    <input type="hidden" name="sortColumn" value="@ViewData["sortColumn"]" />
+    <table>
+        <tr>
+            <td colspan="4">
+                <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" placeholder="Search..." />
+            </td>
+            <td>
+                <input type="submit" value="Go" />
+            </td>
+        </tr>
+        <!--Last value of filter will persist -->
+        <tr>
+            @if (ViewData["filter"] == null) { ViewData["filter"] = "all"; }
+            <td>
+                All<input type="radio" name="filter" value="all" @(ViewData["filter"].Equals("all") ? "checked" : string.Empty) />
+            </td>
+            <td>
+                Title<input type="radio" name="filter" value="title" @(ViewData["filter"].Equals("title") ? "checked" : string.Empty) />
+            </td>
+            <td>
+                Severity<input type="radio" name="filter" value="severity" @(ViewData["filter"].Equals("severity") ? "checked" : string.Empty) />
+            </td>
+            <td>
+                State<input type="radio" name="filter" value="state" @(ViewData["filter"].Equals("state") ? "checked" : string.Empty) />
+            </td>
+            <td>
+                Version<input type="radio" name="filter" value="version" @(ViewData["filter"].Equals("version") ? "checked" : string.Empty) />
+            </td>
+
+        </tr>
+
+    </table>
+}
+<!--Table headers are links for changing sortColumn values-->
+<table class="table" border="1" cellspacing="1">
+    <tr>
+        <th>
+            @Html.ActionLink("Title", "Index", "Bugs", new { sortOrder = ViewData["order"], sortColumn = "title", currentFilter = ViewData["CurrentFilter"], filter = ViewData["filter"] }, null)
+
+        </th>
+        <th>
+            @Html.ActionLink("Severity", "Index", "Bugs", new { sortOrder = ViewData["order"], sortColumn = "severity", currentFilter = ViewData["CurrentFilter"], filter = ViewData["filter"] }, null)
+        </th>
+        <th>
+            @Html.ActionLink("Version", "Index", "Bugs", new { sortOrder = ViewData["order"], sortColumn = "version", currentFilter = ViewData["CurrentFilter"], filter = ViewData["filter"] }, null)
+        </th>
+        <th>
+            @Html.ActionLink("State", "Index", "Bugs", new { sortOrder = ViewData["order"], sortColumn = "state", currentFilter = ViewData["CurrentFilter"], filter = ViewData["filter"] }, null)
+        </th>
+        <th>
+            @Html.ActionLink("Submit Time", "Index", "Bugs", new { sortOrder = ViewData["order"], sortColumn = "submit", currentFilter = ViewData["CurrentFilter"], filter = ViewData["filter"] }, null)
+        </th>
+        <th>
+            @Html.ActionLink("Fix Time", "Index", "Bugs", new { sortOrder = ViewData["order"], sortColumn = "fix", currentFilter = ViewData["CurrentFilter"], filter = ViewData["filter"] }, null)
+        </th>
+    </tr>
+    <!--Display the items-->
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.severity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.version)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.state)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.submit_time)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.fix_time)
+            </td>
+            <td>
+                <!--Below are the dynamically generated links for each user type-->
+                <ul>
+                    @if (!ViewBag.msg.Equals("no") && !ViewBag.msg.Equals("user"))
+                    {
+                        <li> @Html.ActionLink("Edit", "Edit", new { id = item.title,prevPage=Request.Url.ToString()}) </li>
+
+                    }
+                    <li> @Html.ActionLink("Details", "Details", new { id = item.title,prevPage=Request.Url.ToString()}) </li>
+                    @if (ViewBag.msg.Equals("admin"))
+                    {
+                        <li>@Html.ActionLink("Delete", "Delete", new { id = item.title,prevPage=Request.Url.ToString() }) </li>
+                    }
+
+                </ul>
+            </td>
+        </tr>
+    }
+
+</table>
+</table>
+<!--These action links are for switching pages while keeping the previously entered parameter values, to keep sortOrder the same (as explained before); value of ViewData["order"] must be the opposite-->
+@if (Model.HasPreviousPage)
+{
+    @Html.ActionLink("Previous", "Index", "Bugs", new { sortOrder = (ViewData["order"].Equals("asc") ? "desc" : "asc"), sortColumn = @ViewData["sortColumn"], currentFilter = ViewData["CurrentFilter"], filter = ViewData["filter"], pageNumber = (Model.PageIndex - 1) }, null)
+
+}
+
+@Html.ActionLink("About", "About",new {prevPage=Request.Url.ToString() },null)
+@if (Model.HasNextPage)
+{
+    @Html.ActionLink("Next", "Index", "Bugs", new { sortOrder = (ViewData["order"].Equals("asc") ? "desc" : "asc"), sortColumn = @ViewData["sortColumn"], currentFilter = ViewData["CurrentFilter"], filter = ViewData["filter"], pageNumber = (Model.PageIndex + 1) }, null)
+}
+
