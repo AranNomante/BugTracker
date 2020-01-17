@@ -96,6 +96,9 @@ namespace BugTracker.Controllers
             {
                 return HttpNotFound();
             }
+            string imreBase64Data = Convert.ToBase64String(bug.Image.Data);
+            string imgDataURL = string.Format("data:image/png;base64,{0}", imreBase64Data);
+            ViewBag.imgurl = imgDataURL;
             return View(bug);
         }
 
@@ -147,6 +150,7 @@ namespace BugTracker.Controllers
         // GET: Bugs/Edit/5
         public async Task<ActionResult> Edit(string id, string prevPage)
         {
+            //sayfaya assignee emailinin encrypted hali gönderilip kıyaslanacak ona göre editleyebilecek :d
             ViewBag.urlPrev = prevPage;
             CheckCk();
             ViewBag.msg = GetTypeUsr();
@@ -177,21 +181,24 @@ namespace BugTracker.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public async Task<ActionResult> Edit([Bind(Include = "title,submitter,assignee,severity,state,submit_time,version,fix_time")] Bug bug, string prevPage)
+        public async Task<ActionResult> Edit([Bind(Include = "title,submitter,assignee,severity,state,submit_time,version,fix_time,description,fix_description")] Bug bug, string prevPage)
         {
             //TODO include will change 
             //get filebase if null no change on img db and if there's change proceed with FetchImg method...
+            //if fix description is filled make state closed if not 
             ViewBag.urlPrev = prevPage;
             CheckCk();
             ViewBag.msg = GetTypeUsr();
             if (ModelState.IsValid)
             {
-                if (bug.state.Equals("closed"))
+                if (bug.fix_description!=null)
                 {
                     bug.fix_time = DateTime.Now;
+                    bug.state = "closed";
                 }
-                else if (bug.state.Equals("open"))
+                else if (bug.fix_description==null)
                 {
+                    bug.state = "open";
                     bug.fix_time = null;
                 }
                 else

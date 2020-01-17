@@ -117,10 +117,10 @@
             <td>
                 <!--Below are the dynamically generated links for each user type-->
                 <ul>
-                    @if (!ViewBag.msg.Equals("no") && !ViewBag.msg.Equals("user"))
+                    @if (!ViewBag.msg.Equals("no") )
                     {
                         <li> @Html.ActionLink("Edit", "Edit", new { id = item.title,prevPage=Request.Url.ToString()}) </li>
-
+          
                     }
                     <li> @Html.ActionLink("Details", "Details", new { id = item.title,prevPage=Request.Url.ToString()}) </li>
                     @if (ViewBag.msg.Equals("admin"))

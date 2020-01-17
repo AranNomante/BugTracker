@@ -4,7 +4,7 @@
 }
 <!--Edit değişecek-->
 <h2>Edit</h2>
-@using (Html.BeginForm())
+@using (Html.BeginForm("Edit","Bugs",FormMethod.Post,new { enctype = "multipart/form-data"}))
 {
    
     if (!ViewBag.msg.Equals("no"))
@@ -20,41 +20,81 @@
 
             @Html.HiddenFor(model => model.submit_time)
 
+            @Html.HiddenFor(model => model.fix_time)
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.assignee, "assignee", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.DropDownList("assignee", null, htmlAttributes: new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.assignee, "", new { @class = "text-danger" })
+            @if (ViewBag.msg.Equals("admin"))
+            {
+                <!--only admin-->
+                <div class="form-group">
+                    @Html.LabelFor(model => model.assignee, "assignee", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownList("assignee", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.assignee, "", new { @class = "text-danger" })
+                    </div>
                 </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.severity, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.severity, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.severity, "", new { @class = "text-danger" })
+            }
+            else
+            {
+                @Html.HiddenFor(model => model.assignee)
+            }
+            @if (ViewBag.msg.Equals("assignee"))
+            {
+                <!--Can be changed by assignee-->
+                <div class="form-group">
+                    @Html.LabelFor(model => model.fix_description, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.fix_description, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.version, "", new { @class = "text-danger" })
+                    </div>
                 </div>
-            </div>
+            }
+            else
+            {
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.state, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.state, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.state, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.fix_description)
+            }
+            @if (!ViewBag.msg.Equals("user"))
+            {
+                <!--Can be changed by assignee and admin -->
+                <div class="form-group">
+                    @Html.LabelFor(model => model.severity, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.severity, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.severity, "", new { @class = "text-danger" })
+                    </div>
                 </div>
-            </div>
+                <!--Can be changed by assignee and admin -->
+                <div class="form-group">
+                    @Html.LabelFor(model => model.version, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.version, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.version, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            }
+            else
+            {
+                @Html.HiddenFor(model => model.severity)
+                @Html.HiddenFor(model => model.version)
+            }
 
-
+            <!--Can be changed by user assigne and admin-->
             <div class="form-group">
-                @Html.LabelFor(model => model.version, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.description, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.version, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.EditorFor(model => model.description, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.version, "", new { @class = "text-danger" })
                 </div>
             </div>
+            <div class="form-group">
+                <img src="@ViewBag.imgurl" width="800" height="800" />
 
-
+                @Html.Label("Screenshot", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input type="file" name="postedFile" />
+                    <br />
+                </div>
+            </div>
 
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
