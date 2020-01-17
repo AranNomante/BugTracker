@@ -72,7 +72,7 @@
 
         </dl>
 
-        @using (Html.BeginForm("DeleteConfirmed", "Bugs", FormMethod.Post))
+        @using (Html.BeginForm("Delete", "Bugs", FormMethod.Post))
         {
             <input type="hidden" name="prevPage" value="@ViewBag.urlPrev" />
             <input type="hidden" name="id" value="@Model.title" />

@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Validation;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -51,7 +54,7 @@ namespace BugTracker.Controllers
             return View(await PaginatedList<Bug>.CreateAsync(bug.AsNoTracking(), pageNumber ?? 1, 10));
         }
         public async Task<ActionResult> About(int? pageNumber)
-        {        
+        {
             IQueryable<BugStats> data =
                 _db.Bug.GroupBy(x => DbFunctions.TruncateTime(x.submit_time)).Select(x => new BugStats()
                 {
@@ -74,7 +77,7 @@ namespace BugTracker.Controllers
                               select bug).Count();
             ViewBag.users = _db.User.Count();
             ViewBag.assignees = _db.Assignee.Count();
-            data=data.OrderBy(x => x.FileDate);
+            data = data.OrderBy(x => x.FileDate);
             //10 items per page
             return View(await PaginatedList<BugStats>.CreateAsync(data.AsNoTracking(), pageNumber ?? 1, 10));
         }
@@ -109,25 +112,31 @@ namespace BugTracker.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public async Task<ActionResult> Create([Bind(Include = "title,severity, version")] Bug bug, string prevPage)
+        public async Task<ActionResult> Create([Bind(Include = "title,severity,version,description")] Bug bug, string prevPage, HttpPostedFileBase postedFile)
         {
             //TODO include will change 
             ViewBag.urlPrev = prevPage;
             CheckCk();
             ViewBag.msg = GetTypeUsr();
+            Image img = FetchImg(postedFile,bug.title);
             bug.assignee = null;
             bug.submit_time = DateTime.Now;
             bug.fix_time = null;
             bug.state = "open";
-
             bug.submitter = HomeController.Decrypt(HomeController.DeCode(Request.Cookies["user"].Value), Request.Cookies["clearance"].Value);
             bug.Assignee1 = null;
+            bug.fix_description = null;
             string mail = bug.submitter;
             bug.User = (from User in _db.User where User.email.Equals(mail) select User).DefaultIfEmpty(null).First();
             if (ModelState.IsValid)
             {
                 _db.Bug.Add(bug);
+                if (img != null)
+                {
+                    _db.Image.Add(img);
+                }
                 await _db.SaveChangesAsync();
+
                 Response.Redirect(prevPage);
             }
 
@@ -150,15 +159,17 @@ namespace BugTracker.Controllers
             {
                 return HttpNotFound();
             }
-            //Burada bi sıkıntı var submitter gibi olması gerekiyor assigneenin de? büyük ihtimalle dropdown list için yapılmış
-            // değişmemesi gerekiyor? admin değiştirirken burdan seçebilir kimin atanacağını.
             List<SelectListItem> emails = new List<SelectListItem>();
             foreach (var item in await _db.Assignee.ToListAsync())
             {
                 emails.Add(new SelectListItem { Text = item.email });
             }
+            //display img from imgdataurl
+            string imreBase64Data = Convert.ToBase64String(bug.Image.Data);
+            string imgDataURL = string.Format("data:image/png;base64,{0}", imreBase64Data);
+            ViewBag.imgurl = imgDataURL;
             ViewBag.assignee = emails;
-            ViewBag.submitter = new SelectList(_db.User, "email", "password", bug.submitter);
+            ViewBag.submitter = bug.submitter;
             return View(bug);
         }
 
@@ -169,6 +180,7 @@ namespace BugTracker.Controllers
         public async Task<ActionResult> Edit([Bind(Include = "title,submitter,assignee,severity,state,submit_time,version,fix_time")] Bug bug, string prevPage)
         {
             //TODO include will change 
+            //get filebase if null no change on img db and if there's change proceed with FetchImg method...
             ViewBag.urlPrev = prevPage;
             CheckCk();
             ViewBag.msg = GetTypeUsr();
@@ -216,16 +228,20 @@ namespace BugTracker.Controllers
         }
 
         // POST: Bugs/Delete/5
-        [HttpPost]
-        public void DeleteConfirmed(string id, string prevPage)
+        [HttpPost, ActionName("Delete")]
+        public async Task<ActionResult> DeleteConfirmed(string id, string prevPage)
         {
             ViewBag.urlPrev = prevPage;
             CheckCk();
             ViewBag.msg = GetTypeUsr();
             Bug bug = _db.Bug.Find(id);
             _db.Bug.Remove(bug);
-            _db.SaveChangesAsync();
-            Response.Redirect(prevPage);
+            int saved = await _db.SaveChangesAsync();
+            if (saved > 0)
+            {
+                Response.Redirect(prevPage);
+            }
+            return View("Index");
         }
 
         protected override void Dispose(bool disposing)
@@ -424,5 +440,58 @@ namespace BugTracker.Controllers
             return bug;
         }
 
+        private Image FetchImg(HttpPostedFileBase postedFile, string btitle)
+        {
+            Image img = null;
+            Debug.WriteLine("postedfile is null:" + (postedFile == null));
+            if (postedFile != null)
+            {
+                bool extension = Path.GetExtension(postedFile.FileName).ToLower() == ".png";
+                bool content = postedFile.ContentType.ToLower() == "image/png";
+                Debug.WriteLine("Extension:" + (Path.GetExtension(postedFile.FileName).ToLower()) + "\tContent:" + (postedFile.ContentType.ToLower()));
+                if (extension)
+                {
+                    Debug.WriteLine("IN EXTENSION");
+                    if (content)
+                    {
+                        Debug.WriteLine("IN CONTENT");
+
+                        Debug.WriteLine("ContentLength:" + postedFile.ContentLength);
+                        if (postedFile.ContentLength <= 256000)
+                        {
+                            Debug.WriteLine("IN LENGTH");
+                            byte[] bytes;
+                            using (BinaryReader br = new BinaryReader(postedFile.InputStream))
+                            {
+                                bytes = br.ReadBytes(postedFile.ContentLength);
+                            }
+                            Debug.WriteLine("Bytes.len:" + bytes.Length);
+                            img = new Image()
+                            {
+                                title = btitle,
+                                Name = postedFile.FileName,
+                                ContentType = postedFile.ContentType,
+                                Data = bytes
+                            };
+                            Debug.WriteLine("\n-----------\nImg:\ntitle:" + img.title + "\nName" + img.Name + "\nContentType:" + img.ContentType +
+                                "\n-----------");
+                        }
+                        else
+                        {
+                            //file size too big
+                        }
+                    }
+                    else
+                    {
+                        //content not png
+                    }
+                }
+                else
+                {
+                    //display message if file extension is not correct
+                }
+            }
+            return img;
+        }
     }
 }
