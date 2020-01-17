@@ -2,7 +2,6 @@
 
 @{
     ViewBag.Title = "Index";
-
 }
 <!--Index değişmeyecek-->
 <h2>Index</h2>
@@ -18,7 +17,7 @@
     filter: search scope; for example, if version is checked from radio buttons filter will be "version" meaning that search scope is changed
     to version
 -->
-
+@if (ViewData["order"] == null) { ViewData["order"] = ViewData["order"] = "desc"; }
 <h2>
     SortOrder: @ViewData["order"], SortColumn: @ViewData["sortColumn"], Search: @ViewData["searchString"], Filter: @ViewData["filter"],
     CurrentF: @ViewData["CurrentFilter"]
@@ -27,7 +26,7 @@
 <p>
     @if (ViewBag.msg.Equals("user"))
     {
-        @Html.ActionLink("Create New", "Create",new {prevPage=Request.Url.ToString() })
+        @Html.ActionLink("Create New", "Create", new { prevPage = Request.Url.ToString() })
     }
 </p>
 <!--Search Bar-->
@@ -93,57 +92,62 @@
         </th>
     </tr>
     <!--Display the items-->
-    @foreach (var item in Model)
+    @if (Model != null)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.severity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.version)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.state)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.submit_time)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.fix_time)
-            </td>
-            <td>
-                <!--Below are the dynamically generated links for each user type-->
-                <ul>
-                    @if (!ViewBag.msg.Equals("no") )
-                    {
-                        <li> @Html.ActionLink("Edit", "Edit", new { id = item.title,prevPage=Request.Url.ToString()}) </li>
-          
-                    }
-                    <li> @Html.ActionLink("Details", "Details", new { id = item.title,prevPage=Request.Url.ToString()}) </li>
-                    @if (ViewBag.msg.Equals("admin"))
-                    {
-                        <li>@Html.ActionLink("Delete", "Delete", new { id = item.title,prevPage=Request.Url.ToString() }) </li>
-                    }
+        foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.severity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.version)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.state)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.submit_time)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.fix_time)
+                </td>
+                <td>
+                    <!--Below are the dynamically generated links for each user type-->
+                    <ul>
+                        @if (!ViewBag.msg.Equals("no") && !ViewBag.msg.Equals("user"))
+                        {
+                            if (ViewBag.msg.Equals("admin") || (item.assignee != null && item.assignee.Equals(ViewBag.clrassignee)))
+                            {
+                                <li> @Html.ActionLink("Edit", "Edit", new { id = item.title, prevPage = Request.Url.ToString() }) </li>
+                            }
+                        }
+                        <li> @Html.ActionLink("Details", "Details", new { id = item.title, prevPage = Request.Url.ToString() }) </li>
+                        @if (ViewBag.msg.Equals("admin"))
+                        {
+                            <li>@Html.ActionLink("Delete", "Delete", new { id = item.title, prevPage = Request.Url.ToString() }) </li>
+                        }
 
-                </ul>
-            </td>
-        </tr>
+                    </ul>
+                </td>
+            </tr>
+        }
     }
 
 </table>
-</table>
 <!--These action links are for switching pages while keeping the previously entered parameter values, to keep sortOrder the same (as explained before); value of ViewData["order"] must be the opposite-->
-@if (Model.HasPreviousPage)
+
+@if (Model != null && Model.HasPreviousPage)
 {
     @Html.ActionLink("Previous", "Index", "Bugs", new { sortOrder = (ViewData["order"].Equals("asc") ? "desc" : "asc"), sortColumn = @ViewData["sortColumn"], currentFilter = ViewData["CurrentFilter"], filter = ViewData["filter"], pageNumber = (Model.PageIndex - 1) }, null)
 
 }
 
-@Html.ActionLink("About", "About",new {prevPage=Request.Url.ToString() },null)
-@if (Model.HasNextPage)
+@Html.ActionLink("About", "About", new { prevPage = Request.Url.ToString() }, null)
+@if (Model != null && Model.HasNextPage)
 {
     @Html.ActionLink("Next", "Index", "Bugs", new { sortOrder = (ViewData["order"].Equals("asc") ? "desc" : "asc"), sortColumn = @ViewData["sortColumn"], currentFilter = ViewData["CurrentFilter"], filter = ViewData["filter"], pageNumber = (Model.PageIndex + 1) }, null)
 }

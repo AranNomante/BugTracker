@@ -7,7 +7,7 @@
 <h2>Details</h2>
 <div>
     <!--Display image-->
-    <h4>Bug</h4>
+    <h4>Model.title</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -53,7 +53,7 @@
         {
 
             <dt>
-                @Html.DisplayNameFor(model => model.Assignee1.email)
+                Assignee Email
             </dt>
 
             <dd>
@@ -61,7 +61,7 @@
             </dd>
 
             <dt>
-                @Html.DisplayNameFor(model => model.User.email)
+                User Email
             </dt>
 
             <dd>
@@ -85,7 +85,14 @@
             @Html.DisplayNameFor(model => model.Image)
         </dt>
         <dd>
-            <img src="@ViewBag.imgurl" width="800" height="800" />
+            @if (ViewBag.imgurl != null)
+            {
+                <img src="@ViewBag.imgurl" width="800" height="800" />
+            }
+            else
+            {
+                <p>No Screenshot</p>
+            }
         </dd>
 
     </dl>

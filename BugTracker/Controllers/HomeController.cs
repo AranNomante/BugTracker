@@ -14,14 +14,15 @@ namespace BugTracker.Controllers
         // GET: Home
         public ActionResult Index()
         {
-            CheckCk();
+            ViewBag.msg = CheckCk();
             return View();
         }
 
 
         public ActionResult Login()
         {
-            if (CheckCk())
+            string userType = CheckCk();
+            if (userType.Equals("no"))
             {
                 RedirectToAction("Index");
             }
@@ -40,7 +41,7 @@ namespace BugTracker.Controllers
         [HttpPost]
         public void Verify(Credentials crd)
         {
-            
+
             var flag = GetUser(crd);
             if (flag == null)
             {
@@ -59,7 +60,7 @@ namespace BugTracker.Controllers
             {
                 HttpCookie usr = new HttpCookie("user")
                 {
-                    Value = Encode(Encrypt(flag.Email,flag.Title)),
+                    Value = Encode(Encrypt(flag.Email, flag.Title)),
                     Expires = DateTime.Now.AddMinutes(1),
                     HttpOnly = true
                 };
@@ -79,16 +80,33 @@ namespace BugTracker.Controllers
             }
         }
 
-        private bool CheckCk()
+        /**
+               CheckCk()
+               if the user cookie exists ExtendCk() will be called then usertype will be returned
+                */
+        private string CheckCk()
         {
+            ViewBag.clrassignee = "no clearance";
             if (Request.Cookies["user"] != null)
             {
                 ExtendCk();
-                return true;
+                if (Request.Cookies["clearance"].Value.Equals("user"))
+                {
+                    return "user";
+                }
+                else if (Request.Cookies["clearance"].Value.Equals("assignee"))
+                {
+                    ViewBag.clrassignee = HomeController.Decrypt(HomeController.DeCode(Request.Cookies["user"].Value), Request.Cookies["clearance"].Value);
+                    return "assignee";
+                }
+                else
+                {
+                    return "admin";
+                }
             }
             else
             {
-                return false;
+                return "no";
             }
         }
         private void ExtendCk()

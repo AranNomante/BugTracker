@@ -45,8 +45,7 @@ namespace BugTracker.Controllers
                 searchString = currentFilter;
             }
             ViewData["CurrentFilter"] = searchString;
-            CheckCk();
-            ViewBag.msg = GetTypeUsr();
+            ViewBag.msg = CheckCk();
             var bug = _db.Bug.Include(b => b.Assignee1).Include(b => b.User);
             bug = Search(bug, searchString, filter);
             bug = Sort(bug, sortOrder, sortColumn);
@@ -55,6 +54,7 @@ namespace BugTracker.Controllers
         }
         public async Task<ActionResult> About(int? pageNumber)
         {
+            ViewBag.msg = CheckCk();
             IQueryable<BugStats> data =
                 _db.Bug.GroupBy(x => DbFunctions.TruncateTime(x.submit_time)).Select(x => new BugStats()
                 {
@@ -86,7 +86,7 @@ namespace BugTracker.Controllers
         {
             ViewBag.urlPrev = prevPage;
             CheckCk();
-            ViewBag.msg = GetTypeUsr();
+            ViewBag.msg = CheckCk();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -96,9 +96,8 @@ namespace BugTracker.Controllers
             {
                 return HttpNotFound();
             }
-            string imreBase64Data = Convert.ToBase64String(bug.Image.Data);
-            string imgDataURL = string.Format("data:image/png;base64,{0}", imreBase64Data);
-            ViewBag.imgurl = imgDataURL;
+
+            ViewBag.imgurl = FetchImgStr(bug.Image);
             return View(bug);
         }
 
@@ -106,8 +105,7 @@ namespace BugTracker.Controllers
         public ActionResult Create(string prevPage)
         {
             ViewBag.urlPrev = prevPage;
-            CheckCk();
-            ViewBag.msg = GetTypeUsr();
+            ViewBag.msg = CheckCk();
             return View();
         }
 
@@ -119,9 +117,8 @@ namespace BugTracker.Controllers
         {
             //TODO include will change 
             ViewBag.urlPrev = prevPage;
-            CheckCk();
-            ViewBag.msg = GetTypeUsr();
-            Image img = FetchImg(postedFile,bug.title);
+            ViewBag.msg = CheckCk();
+            Image img = FetchImg(postedFile, bug.title);
             bug.assignee = null;
             bug.submit_time = DateTime.Now;
             bug.fix_time = null;
@@ -152,8 +149,7 @@ namespace BugTracker.Controllers
         {
             //sayfaya assignee emailinin encrypted hali gönderilip kıyaslanacak ona göre editleyebilecek :d
             ViewBag.urlPrev = prevPage;
-            CheckCk();
-            ViewBag.msg = GetTypeUsr();
+            ViewBag.msg = CheckCk();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -169,9 +165,7 @@ namespace BugTracker.Controllers
                 emails.Add(new SelectListItem { Text = item.email });
             }
             //display img from imgdataurl
-            string imreBase64Data = Convert.ToBase64String(bug.Image.Data);
-            string imgDataURL = string.Format("data:image/png;base64,{0}", imreBase64Data);
-            ViewBag.imgurl = imgDataURL;
+            ViewBag.imgurl = FetchImgStr(bug.Image);
             ViewBag.assignee = emails;
             ViewBag.submitter = bug.submitter;
             return View(bug);
@@ -181,22 +175,22 @@ namespace BugTracker.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public async Task<ActionResult> Edit([Bind(Include = "title,submitter,assignee,severity,state,submit_time,version,fix_time,description,fix_description")] Bug bug, string prevPage)
+        public async Task<ActionResult> Edit([Bind(Include = "title,submitter,assignee,severity,state,submit_time,version,fix_time,description,fix_description")] Bug bug, string prevPage, HttpPostedFileBase postedFile)
         {
             //TODO include will change 
             //get filebase if null no change on img db and if there's change proceed with FetchImg method...
             //if fix description is filled make state closed if not 
             ViewBag.urlPrev = prevPage;
-            CheckCk();
-            ViewBag.msg = GetTypeUsr();
+            ViewBag.msg = CheckCk();
+            Image img = FetchImg(postedFile, bug.title);
             if (ModelState.IsValid)
             {
-                if (bug.fix_description!=null)
+                if (bug.fix_description != null)
                 {
                     bug.fix_time = DateTime.Now;
                     bug.state = "closed";
                 }
-                else if (bug.fix_description==null)
+                else if (bug.fix_description == null)
                 {
                     bug.state = "open";
                     bug.fix_time = null;
@@ -206,6 +200,17 @@ namespace BugTracker.Controllers
                     ViewBag.assignee = new SelectList(_db.Assignee, "email", "password", bug.assignee);
                     ViewBag.submitter = new SelectList(_db.User, "email", "password", bug.submitter);
                     return View(bug);
+                }
+                if (img != null)
+                {
+                    if (bug.Image != null)
+                    {
+                        _db.Entry(img).State = EntityState.Modified;
+                    }
+                    else
+                    {
+                        _db.Image.Add(img);
+                    }
                 }
                 _db.Entry(bug).State = EntityState.Modified;
                 await _db.SaveChangesAsync();
@@ -220,8 +225,7 @@ namespace BugTracker.Controllers
         public async Task<ActionResult> Delete(string id, string prevPage)
         {
             ViewBag.urlPrev = prevPage;
-            CheckCk();
-            ViewBag.msg = GetTypeUsr();
+            ViewBag.msg = CheckCk();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -239,10 +243,11 @@ namespace BugTracker.Controllers
         public async Task<ActionResult> DeleteConfirmed(string id, string prevPage)
         {
             ViewBag.urlPrev = prevPage;
-            CheckCk();
-            ViewBag.msg = GetTypeUsr();
+            ViewBag.msg = CheckCk();
             Bug bug = _db.Bug.Find(id);
             _db.Bug.Remove(bug);
+
+            Debug.WriteLine("\n----------\n\n" + prevPage + "\n\n----------\n");
             int saved = await _db.SaveChangesAsync();
             if (saved > 0)
             {
@@ -259,24 +264,25 @@ namespace BugTracker.Controllers
             }
             base.Dispose(disposing);
         }
-        /**
-             GetTypeUsr() will check the cookies to return the user type
-              */
-        public string GetTypeUsr()
-        {
-            if (Request.Cookies["user"] == null)
-            {
-                return "no";
-            }
-            else
-            {
 
+
+        /**
+            CheckCk()
+            if the user cookie exists ExtendCk() will be called then usertype will be returned
+             */
+        private string CheckCk()
+        {
+            ViewBag.clrassignee = "no clearance";
+            if (Request.Cookies["user"] != null)
+            {
+                ExtendCk();
                 if (Request.Cookies["clearance"].Value.Equals("user"))
                 {
                     return "user";
                 }
                 else if (Request.Cookies["clearance"].Value.Equals("assignee"))
                 {
+                    ViewBag.clrassignee = HomeController.Decrypt(HomeController.DeCode(Request.Cookies["user"].Value), Request.Cookies["clearance"].Value);
                     return "assignee";
                 }
                 else
@@ -284,22 +290,9 @@ namespace BugTracker.Controllers
                     return "admin";
                 }
             }
-        }
-        /**
-            CheckCk()
-            if the user cookie exists ExtendCk() will be called then true will be returned
-            else false will be returned
-             */
-        private bool CheckCk()
-        {
-            if (Request.Cookies["user"] != null)
-            {
-                ExtendCk();
-                return true;
-            }
             else
             {
-                return false;
+                return "no";
             }
         }
         /**
@@ -464,7 +457,7 @@ namespace BugTracker.Controllers
                         Debug.WriteLine("IN CONTENT");
 
                         Debug.WriteLine("ContentLength:" + postedFile.ContentLength);
-                        if (postedFile.ContentLength <= 256000)
+                        if (postedFile.ContentLength <= 1024 * 1024 * 8)//up to 8 mb 
                         {
                             Debug.WriteLine("IN LENGTH");
                             byte[] bytes;
@@ -480,8 +473,8 @@ namespace BugTracker.Controllers
                                 ContentType = postedFile.ContentType,
                                 Data = bytes
                             };
-                            Debug.WriteLine("\n-----------\nImg:\ntitle:" + img.title + "\nName" + img.Name + "\nContentType:" + img.ContentType +
-                                "\n-----------");
+                            Debug.WriteLine("\n-----------\nImg:\ntitle:" + img.title + "\nName:" + img.Name + "\nContentType:" + img.ContentType +
+                                "\nFinished\n-----------");
                         }
                         else
                         {
@@ -499,6 +492,16 @@ namespace BugTracker.Controllers
                 }
             }
             return img;
+        }
+        private string FetchImgStr(Image img)
+        {
+            if (img == null)
+            {
+                return null;
+            }
+            string imreBase64Data = Convert.ToBase64String(img.Data);
+            string imgDataURL = string.Format("data:image/png;base64,{0}", imreBase64Data);
+            return imgDataURL;
         }
     }
 }

@@ -4,42 +4,46 @@
 }
 <!--Edit değişecek-->
 <h2>Edit</h2>
-@using (Html.BeginForm("Edit","Bugs",FormMethod.Post,new { enctype = "multipart/form-data"}))
+@using (Html.BeginForm("Edit", "Bugs", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
-   
-    if (!ViewBag.msg.Equals("no"))
+
+    if (!ViewBag.msg.Equals("no") && !ViewBag.msg.Equals("user"))
     {
-        <input type="hidden" name="prevPage" value="@ViewBag.urlPrev" />
-        <div class="form-horizontal">
-            <h4>Bug</h4>
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @Html.HiddenFor(model => model.title)
+        if ((ViewBag.msg.Equals("assignee") &&(Model.assignee!=null && Model.assignee.Equals(ViewBag.clrassignee))) || ViewBag.msg.Equals("admin"))
+        {
 
-            @Html.HiddenFor(model => model.submitter)
 
-            @Html.HiddenFor(model => model.submit_time)
+            <input type="hidden" name="prevPage" value="@ViewBag.urlPrev" />
+            <div class="form-horizontal">
+                <h4>Bug</h4>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.title)
 
-            @Html.HiddenFor(model => model.fix_time)
+                @Html.HiddenFor(model => model.submitter)
 
-            @if (ViewBag.msg.Equals("admin"))
-            {
-                <!--only admin-->
-                <div class="form-group">
-                    @Html.LabelFor(model => model.assignee, "assignee", htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.DropDownList("assignee", null, htmlAttributes: new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.assignee, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.submit_time)
+
+                @Html.HiddenFor(model => model.fix_time)
+
+                @if (ViewBag.msg.Equals("admin"))
+                {
+                    <!--only admin-->
+                    <div class="form-group">
+                        <p>Currently Assigned:@Model.assignee</p>
+                        @Html.LabelFor(model => model.assignee, "assignee", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownList("assignee", null, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.assignee, "", new { @class = "text-danger" })
+                        </div>
                     </div>
-                </div>
-            }
-            else
-            {
-                @Html.HiddenFor(model => model.assignee)
-            }
-            @if (ViewBag.msg.Equals("assignee"))
-            {
-                <!--Can be changed by assignee-->
+                }
+                else
+                {
+                    @Html.HiddenFor(model => model.assignee)
+                }
+
+                <!--Can be changed by assignee and admin-->
                 <div class="form-group">
                     @Html.LabelFor(model => model.fix_description, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
@@ -47,14 +51,7 @@
                         @Html.ValidationMessageFor(model => model.version, "", new { @class = "text-danger" })
                     </div>
                 </div>
-            }
-            else
-            {
 
-                @Html.HiddenFor(model => model.fix_description)
-            }
-            @if (!ViewBag.msg.Equals("user"))
-            {
                 <!--Can be changed by assignee and admin -->
                 <div class="form-group">
                     @Html.LabelFor(model => model.severity, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -71,37 +68,39 @@
                         @Html.ValidationMessageFor(model => model.version, "", new { @class = "text-danger" })
                     </div>
                 </div>
-            }
-            else
-            {
-                @Html.HiddenFor(model => model.severity)
-                @Html.HiddenFor(model => model.version)
-            }
 
-            <!--Can be changed by user assigne and admin-->
-            <div class="form-group">
-                @Html.LabelFor(model => model.description, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.description, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.version, "", new { @class = "text-danger" })
+
+                <!--Can be changed by user assigne and admin-->
+                <div class="form-group">
+                    @Html.LabelFor(model => model.description, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.description, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.version, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @if (ViewBag.imgurl != null)
+                    {
+                        <img src="@ViewBag.imgurl" width="800" height="800" />
+                    }
+                    else
+                    {
+                        <p>No Screenshot</p>
+                    }
+                    @Html.Label("Screenshot", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <input type="file" name="postedFile" />
+                        <br />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Save" class="btn btn-default" />
+                    </div>
                 </div>
             </div>
-            <div class="form-group">
-                <img src="@ViewBag.imgurl" width="800" height="800" />
-
-                @Html.Label("Screenshot", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    <input type="file" name="postedFile" />
-                    <br />
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Save" class="btn btn-default" />
-                </div>
-            </div>
-        </div>
+        }
     }
 }
 
