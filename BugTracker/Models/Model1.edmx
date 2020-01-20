@@ -63,7 +63,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Bug_User">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Bug" Type="Self.Bug" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">

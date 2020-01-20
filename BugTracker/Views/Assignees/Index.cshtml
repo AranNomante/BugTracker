@@ -1,33 +1,92 @@
-﻿@model IEnumerable<BugTracker.Models.Assignee>
+﻿@model PaginatedList<BugTracker.Models.Assignee>
 
 @{
     ViewBag.Title = "Index";
 }
+@if (ViewBag.msg.Equals("admin"))
+{
 
-<h2>Index</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.password)
-        </th>
-        <th></th>
-    </tr>
+    <!--Index değişmeyecek-->
+    <h2>Index</h2>
+    <h1>@ViewBag.msg</h1>
+    <h1>@ViewBag.adm</h1>
+    if (ViewData["order"] == null) { ViewData["order"] = ViewData["order"] = "desc"; }
+    <h2>
+        SortOrder: @ViewData["order"], Search: @ViewData["searchString"],
+        CurrentF: @ViewData["CurrentFilter"]
+    </h2>
+    <p>
+        @Html.ActionLink("Create New", "Create", new { prevPage = Request.Url.ToString() })
+    </p>
+    <!--Search Bar-->
+    using (Html.BeginForm("Index", "Assignees"))
+    {
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.password)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.email }) |
-            @Html.ActionLink("Details", "Details", new { id=item.email }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.email })
-        </td>
-    </tr>
+        <input type="hidden" name="sortOrder" value="@(ViewData["order"].Equals("asc") ? "desc" : "asc")" />
+        <table>
+            <tr>
+                <td colspan="4">
+                    <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" placeholder="Search..." />
+                </td>
+                <td>
+                    <input type="submit" value="Go" />
+                </td>
+            </tr>
+
+        </table>
+    }
+
+    <table class="table" border="1" cellspacing="1">
+        <tr>
+            <th>
+                @Html.ActionLink("Email", "Index", "Assignees", new { sortOrder = ViewData["order"], currentFilter = ViewData["CurrentFilter"] }, null)
+
+            </th>
+            <th>
+                Password
+            </th>
+        </tr>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.email)
+                    </td>
+                    <td>
+
+                        @Html.DisplayFor(modelItem => item.password)
+
+                    </td>
+                    <td>
+                        <ul>
+
+
+                            <li> @Html.ActionLink("Edit", "Edit", new { id = item.email.Split('.')[0], prevPage = Request.Url.ToString() }) </li>
+
+                            <li> @Html.ActionLink("Details", "Details", new { id = item.email.Split('.')[0], prevPage = Request.Url.ToString() }) </li>
+                            <li> @Html.ActionLink("Delete", "Delete", new { id = item.email.Split('.')[0], prevPage = Request.Url.ToString() }) </li>
+
+
+                        </ul>
+                    </td>
+                </tr>
+            }
+        }
+
+    </table>
+
+
+    if (Model != null && Model.HasPreviousPage)
+    {
+        @Html.ActionLink("Previous", "Index", "Assignees", new { sortOrder = (ViewData["order"].Equals("asc") ? "desc" : "asc"), currentFilter = ViewData["CurrentFilter"], pageNumber = (Model.PageIndex - 1) }, null)
+
+    }
+    if (Model != null && Model.HasNextPage)
+    {
+        @Html.ActionLink("Next", "Index", "Assignees", new { sortOrder = (ViewData["order"].Equals("asc") ? "desc" : "asc"), currentFilter = ViewData["CurrentFilter"], pageNumber = (Model.PageIndex + 1) }, null)
+    }
+
 }
-
-</table>

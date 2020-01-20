@@ -21,7 +21,11 @@ namespace BugTracker.Controllers
             ViewBag.msg = helper.CheckCk();
             return View();
         }
-
+        public ActionResult Admin()
+        {
+            ViewBag.msg = helper.CheckCk();
+            return View();
+        }
 
         public ActionResult Login()
         {

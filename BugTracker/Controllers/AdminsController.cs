@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using BugTracker.Models;
 using BugTracker.Code;
-using System.Diagnostics;
 
 namespace BugTracker.Controllers
 {
@@ -76,7 +72,7 @@ namespace BugTracker.Controllers
             {
                 _db.Admin.Add(admin);
                 await _db.SaveChangesAsync();
-                return Redirect(prevPage);
+                Response.Redirect(prevPage);
             }
 
             return View(admin);
@@ -85,7 +81,7 @@ namespace BugTracker.Controllers
         // GET: Admins/Edit/5
         public async Task<ActionResult> Edit(string id, string prevPage)
         {
-            
+
             ViewBag.urlPrev = prevPage;
             ViewBag.msg = helper.CheckCk();
             if (id == null)
@@ -140,6 +136,9 @@ namespace BugTracker.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<ActionResult> DeleteConfirmed(string id, string prevPage)
         {
+            id = String.Format("{0}.com", id);
+            ViewBag.urlPrev = prevPage;
+            ViewBag.msg = helper.CheckCk();
             Admin admin = await _db.Admin.FindAsync(id);
             _db.Admin.Remove(admin);
             int saved = await _db.SaveChangesAsync();

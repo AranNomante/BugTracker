@@ -28,6 +28,7 @@ namespace BugTracker.Code
                 ExtendCk();
                 if (controller.Request.Cookies["clearance"].Value.Equals("user"))
                 {
+                    controller.ViewBag.clrusr = Decrypt(DeCode(controller.Request.Cookies["user"].Value), controller.Request.Cookies["clearance"].Value);
                     return "user";
                 }
                 else if (controller.Request.Cookies["clearance"].Value.Equals("assignee"))
@@ -67,10 +68,64 @@ namespace BugTracker.Code
             controller.Response.Cookies.Set(cu);
             controller.Response.Cookies.Set(cc);
         }
-        /**
-         Sort() matches sortColumn with cases and then if there's a match sortOrder is used to determine the OrderBy/OrderByDescending statement,
-            opposite value of the order is stored in ViewData because it behaves like a real world switch.
-             */
+        public IQueryable<Assignee> Sort(IQueryable<Assignee> asg, string sortOrder)
+        {
+            switch (sortOrder)
+            {
+                case "asc":
+
+                    controller.ViewData["order"] = "desc";
+                    asg = asg.OrderBy(b => b.email);
+                    break;
+                case "desc":
+                    controller.ViewData["order"] = "asc";
+                    asg = asg.OrderByDescending(b => b.email);
+                    break;
+                default:
+                    controller.ViewData["order"] = "desc";
+                    asg = asg.OrderBy(b => b.email);
+                    break;
+            }
+            return asg;
+        }
+        public IQueryable<Assignee> Search(IQueryable<Assignee> asg, string searchString)
+        {
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                asg = asg.Where(a => a.email.Contains(searchString));
+            }
+            controller.ViewData["searchString"] = searchString;
+            return asg;
+        }
+        public IQueryable<User> Sort(IQueryable<User> usr, string sortOrder)
+        {
+            switch (sortOrder)
+            {
+                case "asc":
+
+                    controller.ViewData["order"] = "desc";
+                    usr = usr.OrderBy(b => b.email);
+                    break;
+                case "desc":
+                    controller.ViewData["order"] = "asc";
+                    usr = usr.OrderByDescending(b => b.email);
+                    break;
+                default:
+                    controller.ViewData["order"] = "desc";
+                    usr = usr.OrderBy(b => b.email);
+                    break;
+            }
+            return usr;
+        }
+        public IQueryable<User> Search(IQueryable<User> usr, string searchString)
+        {
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                usr = usr.Where(a => a.email.Contains(searchString));
+            }
+            controller.ViewData["searchString"] = searchString;
+            return usr;
+        }
         public IQueryable<Admin> Sort(IQueryable<Admin> adm, string sortOrder)
         {
             switch (sortOrder)
@@ -193,12 +248,6 @@ namespace BugTracker.Code
             }
             return bug;
         }
-        /**
-         Search() will first store its string parameteres in their respective ViewData locations.
-            Checks if both filter and searchString have non-empty values then matches filter with the 
-            switch cases to update bug accordingly then returns the updated bug
-             */
-
         public IQueryable<Bug> Search(IQueryable<Bug> bug, string searchString, string filter)
         {
             if (!String.IsNullOrEmpty(searchString) && !String.IsNullOrEmpty(filter))

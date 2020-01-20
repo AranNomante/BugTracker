@@ -11,23 +11,11 @@
     <h2>Index</h2>
     <h1>@ViewBag.msg</h1>
     <h1>@ViewBag.adm</h1>
-    <!--DEBUG INFO-->
-    <!--Parameters: sortOrder, sortColumn, currentFilter, pageNumber, searchString, filter-->
-    <!--
-        sortOrder: ascending or descending,
-        sortColumn: column that is referenced for comparison,
-        currentFilter: last entered search string,
-        pageNumber: current page index (base 1)
-        searchString: entered search string,
-        filter: search scope; for example, if version is checked from radio buttons filter will be "version" meaning that search scope is changed
-        to version
-    -->
     if (ViewData["order"] == null) { ViewData["order"] = ViewData["order"] = "desc"; }
     <h2>
         SortOrder: @ViewData["order"], Search: @ViewData["searchString"],
         CurrentF: @ViewData["CurrentFilter"]
     </h2>
-    <!--Display Create for users except admin and assignee types-->
     <p>
         @if (ViewBag.adm.Equals("m"))
         {
@@ -35,10 +23,9 @@
         }
     </p>
     <!--Search Bar-->
-    using (Html.BeginForm("Index", "Bugs"))
+    using (Html.BeginForm("Index", "Admins"))
     {
-        <!--sortOrder acts like a switch; for example, to keep a view in ascending order while changing search strings controller has to receive
-            the opposite value of ViewData["order"]-->
+
         <input type="hidden" name="sortOrder" value="@(ViewData["order"].Equals("asc") ? "desc" : "asc")" />
         <table>
             <tr>
@@ -52,7 +39,7 @@
 
         </table>
     }
-    <!--Table headers are links for changing sortColumn values-->
+
     <table class="table" border="1" cellspacing="1">
         <tr>
             <th>
@@ -63,7 +50,6 @@
                 Password
             </th>
         </tr>
-        <!--Display the items-->
         @if (Model != null)
         {
             foreach (var item in Model)
@@ -83,18 +69,17 @@
                         }
                     </td>
                     <td>
-                        <!--Below are the dynamically generated links for each user type-->
                         <ul>
 
                             <!--adm=m master admin else normal-->
                             @if (ViewBag.adm.Equals("m") || item.email.Equals(ViewBag.adm))
                             {
-                            <li> @Html.ActionLink("Edit", "Edit", new { id = item.email.Split('.')[0], prevPage = Request.Url.ToString() }) </li>
+                                <li> @Html.ActionLink("Edit", "Edit", new { id = item.email.Split('.')[0], prevPage = Request.Url.ToString() }) </li>
                             }
 
-                            @if (ViewBag.adm.Equals("m") )
+                            @if (ViewBag.adm.Equals("m"))
                             {
-                            <li> @Html.ActionLink("Delete", "Delete", new { id = item.email.Split('.')[0], prevPage = Request.Url.ToString() }) </li>
+                                <li> @Html.ActionLink("Delete", "Delete", new { id = item.email.Split('.')[0], prevPage = Request.Url.ToString() }) </li>
                             }
 
                         </ul>
@@ -104,7 +89,7 @@
         }
 
     </table>
-    <!--These action links are for switching pages while keeping the previously entered parameter values, to keep sortOrder the same (as explained before); value of ViewData["order"] must be the opposite-->
+
 
     if (Model != null && Model.HasPreviousPage)
     {
@@ -113,7 +98,7 @@
     }
     if (Model != null && Model.HasNextPage)
     {
-        @Html.ActionLink("Next", "Index", "Admins", new { sortOrder = (ViewData["order"].Equals("asc") ? "desc" : "asc"), currentFilter = ViewData["CurrentFilter"],  pageNumber = (Model.PageIndex + 1) }, null)
+        @Html.ActionLink("Next", "Index", "Admins", new { sortOrder = (ViewData["order"].Equals("asc") ? "desc" : "asc"), currentFilter = ViewData["CurrentFilter"], pageNumber = (Model.PageIndex + 1) }, null)
     }
 
 }
