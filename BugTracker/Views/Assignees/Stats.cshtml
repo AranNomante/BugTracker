@@ -51,33 +51,39 @@
             <th>
                 Submit Time
             </th>
+            <th>
+                Fix Time
+            </th>
         </tr>
 
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.severity)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.state)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.version)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.submit_time)
-                </td>
-                <td>
-                    <ul>
-                        <li> @Html.ActionLink("Edit", "Edit", "Bugs", new { id = item.title, prevPage = Request.Url.ToString() }, null) </li>
-                        <li> @Html.ActionLink("Details", "Details", "Bugs", new { id = item.title, prevPage = Request.Url.ToString() }, null) </li>
-                    </ul>
-                </td>
-            </tr>
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.severity)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.state)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.version)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.submit_time)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fix_time)
+        </td>
+        <td>
+            <ul>
+                <li> @Html.ActionLink("Edit", "Edit", "Bugs", new { id = item.title, prevPage = Request.Url.ToString() }, null) </li>
+                <li> @Html.ActionLink("Details", "Details", "Bugs", new { id = item.title, prevPage = Request.Url.ToString() }, null) </li>
+            </ul>
+        </td>
+    </tr>
         }
     </table>
     if (Model.HasPreviousPage)
