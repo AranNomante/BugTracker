@@ -35,6 +35,11 @@ namespace BugTracker.Controllers
         public async Task<ActionResult> Index(string sortOrder, string currentFilter,
  int? pageNumber, string searchString)
         {
+            string ustp=helper.CheckCk();
+            if (!ustp.Equals("admin"))
+            {
+                Response.Redirect("/Home");
+            }
             if (searchString != null)
             {
                 pageNumber = 1;
@@ -44,7 +49,7 @@ namespace BugTracker.Controllers
                 searchString = currentFilter;
             }
             ViewData["CurrentFilter"] = searchString;
-            ViewBag.msg = helper.CheckCk();
+            ViewBag.msg =ustp;
             var adm = _db.Admin.AsQueryable();
             adm = helper.Search(adm, searchString);
             adm = helper.Sort(adm, sortOrder);
@@ -55,8 +60,13 @@ namespace BugTracker.Controllers
         // GET: Admins/Create
         public ActionResult Create(string prevPage)
         {
+            string ustp = helper.CheckCk();
+            if (!ustp.Equals("admin"))
+            {
+                Response.Redirect("/Home");
+            }
             ViewBag.urlPrev = prevPage;
-            ViewBag.msg = helper.CheckCk();
+            ViewBag.msg = ustp;
             return View();
         }
 
@@ -66,8 +76,13 @@ namespace BugTracker.Controllers
         [HttpPost]
         public async Task<ActionResult> Create([Bind(Include = "email,password")] Admin admin, string prevPage)
         {
+            string ustp = helper.CheckCk();
+            if (!ustp.Equals("admin"))
+            {
+                Response.Redirect("/Home");
+            }
             ViewBag.urlPrev = prevPage;
-            ViewBag.msg = helper.CheckCk();
+            ViewBag.msg = ustp;
             if (ModelState.IsValid)
             {
                 _db.Admin.Add(admin);
@@ -81,9 +96,13 @@ namespace BugTracker.Controllers
         // GET: Admins/Edit/5
         public async Task<ActionResult> Edit(string id, string prevPage)
         {
-
+            string ustp = helper.CheckCk();
+            if (!ustp.Equals("admin"))
+            {
+                Response.Redirect("/Home");
+            }
             ViewBag.urlPrev = prevPage;
-            ViewBag.msg = helper.CheckCk();
+            ViewBag.msg = ustp;
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -103,8 +122,13 @@ namespace BugTracker.Controllers
         [HttpPost]
         public async Task<ActionResult> Edit([Bind(Include = "email,password")] Admin admin, string prevPage)
         {
+            string ustp = helper.CheckCk();
+            if (!ustp.Equals("admin"))
+            {
+                Response.Redirect("/Home");
+            }
             ViewBag.urlPrev = prevPage;
-            ViewBag.msg = helper.CheckCk();
+            ViewBag.msg = ustp;
             if (ModelState.IsValid)
             {
                 _db.Entry(admin).State = EntityState.Modified;
@@ -117,8 +141,13 @@ namespace BugTracker.Controllers
         // GET: Admins/Delete/5
         public async Task<ActionResult> Delete(string id, string prevPage)
         {
+            string ustp = helper.CheckCk();
+            if (!ustp.Equals("admin"))
+            {
+                Response.Redirect("/Home");
+            }
             ViewBag.urlPrev = prevPage;
-            ViewBag.msg = helper.CheckCk();
+            ViewBag.msg = ustp;
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -136,9 +165,14 @@ namespace BugTracker.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<ActionResult> DeleteConfirmed(string id, string prevPage)
         {
+            string ustp = helper.CheckCk();
+            if (!ustp.Equals("admin"))
+            {
+                Response.Redirect("/Home");
+            }
             id = String.Format("{0}.com", id);
             ViewBag.urlPrev = prevPage;
-            ViewBag.msg = helper.CheckCk();
+            ViewBag.msg = ustp;
             Admin admin = await _db.Admin.FindAsync(id);
             _db.Admin.Remove(admin);
             int saved = await _db.SaveChangesAsync();

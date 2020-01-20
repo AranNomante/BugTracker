@@ -51,24 +51,18 @@ namespace BugTracker.Controllers
         }
 
 
-        // GET: Users/Details/5
-        public async Task<ActionResult> Details(string id, string prevPage)
+        public async Task<ActionResult> Stats(int? pageNumber)
         {
-            ViewBag.urlPrev = prevPage;
             ViewBag.msg = helper.CheckCk();
-            //to be filled with statistic info
-            /*
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            User user = await db.User.FindAsync(id);
-            if (user == null)
-            {
-                return HttpNotFound();
-            }
-            return View(user);*/
-            return View();
+            var data = _db.Bug.AsQueryable();
+            string usr = helper.Decrypt(helper.DeCode(Request.Cookies["user"].Value), Request.Cookies["clearance"].Value);
+            ViewBag.total = data.Where(b => b.submitter.Equals(usr)).Count();
+            ViewBag.open = data.Where(b => b.state.Equals("open") && b.submitter.Equals(usr)).Count();
+            ViewBag.closed = data.Where(b => b.state.Equals("closed") && b.submitter.Equals(usr)).Count();
+            data = data.Where(b => b.submitter.Equals(usr));
+            data = data.OrderByDescending(x => x.submit_time);
+            //10 items per page
+            return View(await PaginatedList<Bug>.CreateAsync(data.AsNoTracking(), pageNumber ?? 1, 10));
         }
 
         // GET: Users/Create

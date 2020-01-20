@@ -107,8 +107,13 @@ namespace BugTracker.Controllers
         // GET: Bugs/Create
         public ActionResult Create(string prevPage)
         {
+            string ustp = helper.CheckCk();
+            if (!ustp.Equals("user"))
+            {
+                Response.Redirect("/Home");
+            }
             ViewBag.urlPrev = prevPage;
-            ViewBag.msg = helper.CheckCk();
+            ViewBag.msg = ustp;
             return View();
         }
 
@@ -118,8 +123,13 @@ namespace BugTracker.Controllers
         [HttpPost]
         public async Task<ActionResult> Create([Bind(Include = "title,severity,version,description")] Bug bug, string prevPage, HttpPostedFileBase postedFile)
         {
+            string ustp = helper.CheckCk();
+            if (!ustp.Equals("user"))
+            {
+                Response.Redirect("/Home");
+            }
             ViewBag.urlPrev = prevPage;
-            ViewBag.msg = helper.CheckCk();
+            ViewBag.msg = ustp;
             Image img = FetchImg(postedFile, bug.title);
             bug.assignee = null;
             bug.submit_time = DateTime.Now;
@@ -148,9 +158,13 @@ namespace BugTracker.Controllers
         // GET: Bugs/Edit/5
         public async Task<ActionResult> Edit(string id, string prevPage)
         {
-            //sayfaya assignee emailinin encrypted hali gönderilip kıyaslanacak ona göre editleyebilecek :d
+            string ustp = helper.CheckCk();
+            if (!ustp.Equals("admin") && !ustp.Equals("assignee"))
+            {
+                Response.Redirect("/Home");
+            }
             ViewBag.urlPrev = prevPage;
-            ViewBag.msg = helper.CheckCk();
+            ViewBag.msg = ustp;
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -178,11 +192,13 @@ namespace BugTracker.Controllers
         [HttpPost]
         public async Task<ActionResult> Edit([Bind(Include = "title,submitter,assignee,severity,state,submit_time,version,fix_time,description,fix_description")] Bug bug, string prevPage, HttpPostedFileBase postedFile)
         {
-            //TODO include will change 
-            //get filebase if null no change on img db and if there's change proceed with FetchImg method...
-            //if fix description is filled make state closed if not 
+            string ustp = helper.CheckCk();
+            if (!ustp.Equals("admin") && !ustp.Equals("assignee"))
+            {
+                Response.Redirect("/Home");
+            }
             ViewBag.urlPrev = prevPage;
-            ViewBag.msg = helper.CheckCk();
+            ViewBag.msg = ustp;
             Image img = FetchImg(postedFile, bug.title);
             if (ModelState.IsValid)
             {
@@ -225,8 +241,13 @@ namespace BugTracker.Controllers
         // GET: Bugs/Delete/5
         public async Task<ActionResult> Delete(string id, string prevPage)
         {
+            string ustp = helper.CheckCk();
+            if (!ustp.Equals("admin"))
+            {
+                Response.Redirect("/Home");
+            }
             ViewBag.urlPrev = prevPage;
-            ViewBag.msg = helper.CheckCk();
+            ViewBag.msg =ustp;
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -243,8 +264,13 @@ namespace BugTracker.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<ActionResult> DeleteConfirmed(string id, string prevPage)
         {
+            string ustp = helper.CheckCk();
+            if (!ustp.Equals("admin"))
+            {
+                Response.Redirect("/Home");
+            }
             ViewBag.urlPrev = prevPage;
-            ViewBag.msg = helper.CheckCk();
+            ViewBag.msg = ustp;
             Bug bug = _db.Bug.Find(id);
             _db.Bug.Remove(bug);
             int saved = await _db.SaveChangesAsync();

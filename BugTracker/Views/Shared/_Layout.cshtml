@@ -22,6 +22,18 @@
                     @Html.ActionLink("Admin Panel", "Admin", "Home")
                 </li>
             }
+            else if (ViewBag.msg.Equals("user"))
+            {
+                <li class="navbar-link">
+                    @Html.ActionLink("User Panel", "Stats", "Users")
+                </li>
+            }
+            else if (ViewBag.msg.Equals("assignee"))
+            {
+                <li class="navbar-link">
+                    @Html.ActionLink("Assignee Panel", "Stats", "Assignees")
+                </li>
+            }
             <li class="navbar-link">
                 @if (Request.Cookies["user"] != null)
                 {

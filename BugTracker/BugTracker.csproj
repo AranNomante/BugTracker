@@ -206,15 +206,15 @@
     <Content Include="Views\Bugs\About.cshtml" />
     <Content Include="Views\Assignees\Create.cshtml" />
     <Content Include="Views\Assignees\Delete.cshtml" />
-    <Content Include="Views\Assignees\Details.cshtml" />
     <Content Include="Views\Assignees\Edit.cshtml" />
     <Content Include="Views\Assignees\Index.cshtml" />
     <Content Include="Views\Users\Create.cshtml" />
     <Content Include="Views\Users\Delete.cshtml" />
-    <Content Include="Views\Users\Details.cshtml" />
     <Content Include="Views\Users\Edit.cshtml" />
     <Content Include="Views\Users\Index.cshtml" />
     <Content Include="Views\Home\Admin.cshtml" />
+    <Content Include="Views\Assignees\Stats.cshtml" />
+    <Content Include="Views\Users\Stats.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

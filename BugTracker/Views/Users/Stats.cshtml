@@ -1,0 +1,93 @@
+﻿@model PaginatedList<BugTracker.Models.Bug>
+@{
+    ViewBag.Title = "Stats";
+}
+@if (ViewBag.msg.Equals("user"))
+{
+
+
+    <table border="1">
+        <tr>
+            <td>
+                Total Number of Bugs Posted By You
+            </td>
+            <td>
+                @ViewBag.total
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Total Bugs Awaiting Fix
+            </td>
+            <td>
+                @ViewBag.open
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Total Fixed Bugs That You Posted
+            </td>
+            <td>
+                @ViewBag.closed
+            </td>
+        </tr>
+    </table>
+    <h3>
+    </h3>
+    <table border="1">
+        <tr>
+            <th>
+                Title
+            </th>
+            <th>
+                Severity
+            </th>
+            <th>
+                State
+            </th>
+            <th>
+                Version
+            </th>
+            <th>
+                Submit Time
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.severity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.state)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.version)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.submit_time)
+                </td>
+                <td>
+                    <ul>
+                        <li> @Html.ActionLink("Details", "Details", "Bugs", new { id = item.title, prevPage = Request.Url.ToString() }, null) </li>
+                    </ul>
+                </td>
+            </tr>
+        }
+    </table>
+    if (Model.HasPreviousPage)
+    {
+        @Html.ActionLink("Previous", "Stats", "Users", new { pageNumber = (Model.PageIndex - 1) }, null)
+
+    }
+    if (Model.HasNextPage)
+    {
+        @Html.ActionLink("Next", "Stats", "Users", new { pageNumber = (Model.PageIndex + 1) }, null)
+    }
+
+
+}

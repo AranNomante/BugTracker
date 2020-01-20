@@ -5,15 +5,15 @@
 }
 
 <!--Create değişecek-->
-
-<h2>Create</h2>
-@using (Html.BeginForm("Create", "Bugs", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@if (ViewBag.msg.Equals("user"))
 {
 
-
-
-    if (ViewBag.msg.Equals("user"))
+    using (Html.BeginForm("Create", "Bugs", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
+
+
+
+
         <input type="hidden" name="prevPage" value="@ViewBag.urlPrev" />
         <div class="form-horizontal">
             <h4>Bug</h4>
@@ -68,8 +68,3 @@
         </div>
     }
 }
-
-
-<div>
-    <a href="@ViewBag.urlPrev">Previous Page</a>
-</div>

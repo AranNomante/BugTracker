@@ -4,8 +4,6 @@
     ViewBag.Title = "Index";
 }
 <!--Index değişmeyecek-->
-<h2>Index</h2>
-<h1>@ViewBag.msg</h1>
 <!--DEBUG INFO-->
 <!--Parameters: sortOrder, sortColumn, currentFilter, pageNumber, searchString, filter-->
 <!--
@@ -90,6 +88,15 @@
         <th>
             @Html.ActionLink("Fix Time", "Index", "Bugs", new { sortOrder = ViewData["order"], sortColumn = "fix", currentFilter = ViewData["CurrentFilter"], filter = ViewData["filter"] }, null)
         </th>
+        @if (ViewBag.msg.Equals("admin"))
+        {
+            <th>
+                User
+            </th>
+            <th>
+                Assignee
+            </th>
+        }
     </tr>
     <!--Display the items-->
     @if (Model != null)
@@ -115,6 +122,16 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.fix_time)
                 </td>
+                @if (ViewBag.msg.Equals("admin"))
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.submitter)
+                    </td>
+                    <td>
+
+                        @Html.DisplayFor(modelItem => item.assignee)
+                    </td>
+                }
                 <td>
                     <!--Below are the dynamically generated links for each user type-->
                     <ul>
