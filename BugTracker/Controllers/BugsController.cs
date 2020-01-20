@@ -2,23 +2,27 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
-using System.Data.Entity.Validation;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using BugTracker.Models;
+using BugTracker.Code;
 //TODO image değiştirirken veya eklerken bind içerisinde postta gelebiliyor mu bir bak
 namespace BugTracker.Controllers
 {
     public class BugsController : Controller
     {
         private BugTrackerEntities _db = new BugTrackerEntities();
+        private Helper helper;
 
+        public BugsController()
+        {
+            helper = new Helper(this);
+        }
         // GET: Bugs
         /** 
             Flow:
@@ -45,16 +49,16 @@ namespace BugTracker.Controllers
                 searchString = currentFilter;
             }
             ViewData["CurrentFilter"] = searchString;
-            ViewBag.msg = CheckCk();
+            ViewBag.msg = helper.CheckCk();
             var bug = _db.Bug.Include(b => b.Assignee1).Include(b => b.User);
-            bug = Search(bug, searchString, filter);
-            bug = Sort(bug, sortOrder, sortColumn);
+            bug = helper.Search(bug, searchString, filter);
+            bug = helper.Sort(bug, sortOrder, sortColumn);
             //10 items per page
             return View(await PaginatedList<Bug>.CreateAsync(bug.AsNoTracking(), pageNumber ?? 1, 10));
         }
         public async Task<ActionResult> About(int? pageNumber)
         {
-            ViewBag.msg = CheckCk();
+            ViewBag.msg = helper.CheckCk();
             IQueryable<BugStats> data =
                 _db.Bug.GroupBy(x => DbFunctions.TruncateTime(x.submit_time)).Select(x => new BugStats()
                 {
@@ -85,8 +89,7 @@ namespace BugTracker.Controllers
         public async Task<ActionResult> Details(string id, string prevPage)
         {
             ViewBag.urlPrev = prevPage;
-            CheckCk();
-            ViewBag.msg = CheckCk();
+            ViewBag.msg = helper.CheckCk();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -105,7 +108,7 @@ namespace BugTracker.Controllers
         public ActionResult Create(string prevPage)
         {
             ViewBag.urlPrev = prevPage;
-            ViewBag.msg = CheckCk();
+            ViewBag.msg = helper.CheckCk();
             return View();
         }
 
@@ -115,15 +118,14 @@ namespace BugTracker.Controllers
         [HttpPost]
         public async Task<ActionResult> Create([Bind(Include = "title,severity,version,description")] Bug bug, string prevPage, HttpPostedFileBase postedFile)
         {
-            //TODO include will change 
             ViewBag.urlPrev = prevPage;
-            ViewBag.msg = CheckCk();
+            ViewBag.msg = helper.CheckCk();
             Image img = FetchImg(postedFile, bug.title);
             bug.assignee = null;
             bug.submit_time = DateTime.Now;
             bug.fix_time = null;
             bug.state = "open";
-            bug.submitter = HomeController.Decrypt(HomeController.DeCode(Request.Cookies["user"].Value), Request.Cookies["clearance"].Value);
+            bug.submitter = helper.Decrypt(helper.DeCode(Request.Cookies["user"].Value), Request.Cookies["clearance"].Value);
             bug.Assignee1 = null;
             bug.fix_description = null;
             string mail = bug.submitter;
@@ -140,7 +142,6 @@ namespace BugTracker.Controllers
                 Response.Redirect(prevPage);
             }
 
-            ViewBag.submitter = new SelectList(_db.User, "email", "password", bug.submitter);
             return View(bug);
         }
 
@@ -149,7 +150,7 @@ namespace BugTracker.Controllers
         {
             //sayfaya assignee emailinin encrypted hali gönderilip kıyaslanacak ona göre editleyebilecek :d
             ViewBag.urlPrev = prevPage;
-            ViewBag.msg = CheckCk();
+            ViewBag.msg = helper.CheckCk();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -181,7 +182,7 @@ namespace BugTracker.Controllers
             //get filebase if null no change on img db and if there's change proceed with FetchImg method...
             //if fix description is filled make state closed if not 
             ViewBag.urlPrev = prevPage;
-            ViewBag.msg = CheckCk();
+            ViewBag.msg = helper.CheckCk();
             Image img = FetchImg(postedFile, bug.title);
             if (ModelState.IsValid)
             {
@@ -225,7 +226,7 @@ namespace BugTracker.Controllers
         public async Task<ActionResult> Delete(string id, string prevPage)
         {
             ViewBag.urlPrev = prevPage;
-            ViewBag.msg = CheckCk();
+            ViewBag.msg = helper.CheckCk();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -243,11 +244,9 @@ namespace BugTracker.Controllers
         public async Task<ActionResult> DeleteConfirmed(string id, string prevPage)
         {
             ViewBag.urlPrev = prevPage;
-            ViewBag.msg = CheckCk();
+            ViewBag.msg = helper.CheckCk();
             Bug bug = _db.Bug.Find(id);
             _db.Bug.Remove(bug);
-
-            Debug.WriteLine("\n----------\n\n" + prevPage + "\n\n----------\n");
             int saved = await _db.SaveChangesAsync();
             if (saved > 0)
             {
@@ -266,179 +265,6 @@ namespace BugTracker.Controllers
         }
 
 
-        /**
-            CheckCk()
-            if the user cookie exists ExtendCk() will be called then usertype will be returned
-             */
-        private string CheckCk()
-        {
-            ViewBag.clrassignee = "no clearance";
-            if (Request.Cookies["user"] != null)
-            {
-                ExtendCk();
-                if (Request.Cookies["clearance"].Value.Equals("user"))
-                {
-                    return "user";
-                }
-                else if (Request.Cookies["clearance"].Value.Equals("assignee"))
-                {
-                    ViewBag.clrassignee = HomeController.Decrypt(HomeController.DeCode(Request.Cookies["user"].Value), Request.Cookies["clearance"].Value);
-                    return "assignee";
-                }
-                else
-                {
-                    return "admin";
-                }
-            }
-            else
-            {
-                return "no";
-            }
-        }
-        /**
-            ExtendCk() will set their expiration timers and update the cookies
-         */
-        private void ExtendCk()
-        {
-            //always called when cookie:name exists
-            HttpCookie cu = Request.Cookies["user"];
-            HttpCookie cc = Request.Cookies["clearance"];
-            cu.Expires = DateTime.Now.AddMinutes(1);
-            cc.Expires = DateTime.Now.AddMinutes(1);
-            Response.Cookies.Set(cu);
-            Response.Cookies.Set(cc);
-        }
-        /**
-         Sort() matches sortColumn with cases and then if there's a match sortOrder is used to determine the OrderBy/OrderByDescending statement,
-            opposite value of the order is stored in ViewData because it behaves like a real world switch.
-             */
-        private IQueryable<Bug> Sort(IQueryable<Bug> bug, string sortOrder, string sortColumn)
-        {
-            switch (sortColumn)
-            {
-
-                case "title":
-                    if (sortOrder.Equals("asc"))
-                    {
-                        ViewData["order"] = "desc";
-                        bug = bug.OrderBy(b => b.title);
-                    }
-                    else
-                    {
-                        ViewData["order"] = "asc";
-                        bug = bug.OrderByDescending(b => b.title);
-                    }
-                    ViewData["sortColumn"] = "title";
-                    break;
-                case "state":
-                    if (sortOrder.Equals("asc"))
-                    {
-                        ViewData["order"] = "desc";
-                        bug = bug.OrderBy(b => b.state);
-                    }
-                    else
-                    {
-                        ViewData["order"] = "asc";
-                        bug = bug.OrderByDescending(b => b.state);
-                    }
-                    ViewData["sortColumn"] = "state";
-                    break;
-
-                case "severity":
-                    if (sortOrder.Equals("asc"))
-                    {
-                        ViewData["order"] = "desc";
-                        bug = bug.OrderBy(b => b.severity);
-                    }
-                    else
-                    {
-                        ViewData["order"] = "asc";
-                        bug = bug.OrderByDescending(b => b.severity);
-                    }
-                    ViewData["sortColumn"] = "severity";
-                    break;
-                case "submit":
-                    if (sortOrder.Equals("asc"))
-                    {
-                        ViewData["order"] = "desc";
-                        bug = bug.OrderBy(b => b.submit_time);
-                    }
-                    else
-                    {
-                        ViewData["order"] = "asc";
-                        bug = bug.OrderByDescending(b => b.submit_time);
-                    }
-                    ViewData["sortColumn"] = "submit";
-                    break;
-                case "version":
-                    if (sortOrder.Equals("asc"))
-                    {
-                        ViewData["order"] = "desc";
-                        bug = bug.OrderBy(b => b.version);
-                    }
-                    else
-                    {
-                        ViewData["order"] = "asc";
-                        bug = bug.OrderByDescending(b => b.version);
-                    }
-                    ViewData["sortColumn"] = "version";
-                    break;
-
-                case "fix":
-                    if (sortOrder.Equals("asc"))
-                    {
-                        ViewData["order"] = "desc";
-                        bug = bug.OrderBy(b => b.fix_time);
-                    }
-                    else
-                    {
-                        ViewData["order"] = "asc";
-                        bug = bug.OrderByDescending(b => b.fix_time);
-                    }
-                    ViewData["sortColumn"] = "fix";
-                    break;
-                default:
-                    ViewData["order"] = "desc";
-                    ViewData["sortColumn"] = "title";
-                    bug = bug.OrderBy(b => b.title);
-                    break;
-            }
-            return bug;
-        }
-        /**
-         Search() will first store its string parameteres in their respective ViewData locations.
-            Checks if both filter and searchString have non-empty values then matches filter with the 
-            switch cases to update bug accordingly then returns the updated bug
-             */
-
-        private IQueryable<Bug> Search(IQueryable<Bug> bug, string searchString, string filter)
-        {
-            if (!String.IsNullOrEmpty(searchString) && !String.IsNullOrEmpty(filter))
-            {
-                switch (filter)
-                {
-                    case "all":
-                        bug = bug.Where(b => b.title.Contains(searchString) || b.severity.Contains(searchString) ||
-                            b.state.Contains(searchString) || b.version.Contains(searchString));
-                        break;
-                    case "title":
-                        bug = bug.Where(b => b.title.Contains(searchString));
-                        break;
-                    case "severity":
-                        bug = bug.Where(b => b.severity.Contains(searchString));
-                        break;
-                    case "state":
-                        bug = bug.Where(b => b.state.Contains(searchString));
-                        break;
-                    case "version":
-                        bug = bug.Where(b => b.version.Contains(searchString));
-                        break;
-                }
-            }
-            ViewData["searchString"] = searchString;
-            ViewData["filter"] = filter;
-            return bug;
-        }
 
         private Image FetchImg(HttpPostedFileBase postedFile, string btitle)
         {

@@ -101,7 +101,11 @@
     <ul>
         @if (!ViewBag.msg.Equals("no") && !ViewBag.msg.Equals("user"))
         {
-            <li>  @Html.ActionLink("Edit", "Edit", new { id = Model.title, prevPage = Request.Url.ToString() })</li>
+            if (ViewBag.msg.Equals("admin") || (Model.assignee != null && Model.assignee.Equals(ViewBag.clrassignee)))
+            {
+                <li>  @Html.ActionLink("Edit", "Edit", new { id = Model.title, prevPage = Request.Url.ToString() })</li>
+            }
+
         }
         <li><a href="@ViewBag.urlPrev">Previous Page</a></li>
     </ul>

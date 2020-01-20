@@ -139,6 +139,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Code\Helper.cs" />
     <Compile Include="Code\PaginatedList.cs" />
     <Compile Include="Controllers\AdminsController.cs" />
     <Compile Include="Controllers\BugsController.cs" />
@@ -198,7 +199,6 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
     <Content Include="Views\Admins\Create.cshtml" />
     <Content Include="Views\Admins\Delete.cshtml" />
-    <Content Include="Views\Admins\Details.cshtml" />
     <Content Include="Views\Admins\Edit.cshtml" />
     <Content Include="Views\Admins\Index.cshtml" />
     <Content Include="Views\Bugs\About.cshtml" />
