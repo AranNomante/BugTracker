@@ -10,6 +10,7 @@
     <!--Index değişmeyecek-->
     <h2>Index</h2>
     <h1>@ViewBag.msg</h1>
+    <h1>@ViewBag.adm</h1>
     <!--DEBUG INFO-->
     <!--Parameters: sortOrder, sortColumn, currentFilter, pageNumber, searchString, filter-->
     <!--
@@ -88,12 +89,12 @@
                             <!--adm=m master admin else normal-->
                             @if (ViewBag.adm.Equals("m") || item.email.Equals(ViewBag.adm))
                             {
-                                <li> @Html.ActionLink("Edit", "Edit", new { id = item.email, prevPage = Request.Url.ToString() }) </li>
+                            <li> @Html.ActionLink("Edit", "Edit", new { id = item.email.Split('.')[0], prevPage = Request.Url.ToString() }) </li>
                             }
 
-                            @if (ViewBag.adm.Equals("m"))
+                            @if (ViewBag.adm.Equals("m") )
                             {
-                                <li>@Html.ActionLink("Delete", "Delete", new { id = item.email, prevPage = Request.Url.ToString() }) </li>
+                            <li> @Html.ActionLink("Delete", "Delete", new { id = item.email.Split('.')[0], prevPage = Request.Url.ToString() }) </li>
                             }
 
                         </ul>

@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using BugTracker.Models;
 using BugTracker.Code;
+using System.Diagnostics;
 
 namespace BugTracker.Controllers
 {
@@ -84,12 +85,14 @@ namespace BugTracker.Controllers
         // GET: Admins/Edit/5
         public async Task<ActionResult> Edit(string id, string prevPage)
         {
+            
             ViewBag.urlPrev = prevPage;
             ViewBag.msg = helper.CheckCk();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            id = String.Format("{0}.com", id);
             Admin admin = await _db.Admin.FindAsync(id);
             if (admin == null)
             {
@@ -124,6 +127,7 @@ namespace BugTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            id = String.Format("{0}.com", id);
             Admin admin = await _db.Admin.FindAsync(id);
             if (admin == null)
             {
