@@ -47,17 +47,20 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.fix_description, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.EditorFor(model => model.fix_description, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.TextAreaFor(model => model.fix_description, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.version, "", new { @class = "text-danger" })
                     </div>
                 </div>
 
                 <!--Can be changed by assignee and admin -->
+
                 <div class="form-group">
                     @Html.LabelFor(model => model.severity, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.EditorFor(model => model.severity, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.severity, "", new { @class = "text-danger" })
+                        Trivial @Html.RadioButtonFor(model => model.severity, "Trivial")
+                        Minor @Html.RadioButtonFor(model => model.severity, "Minor")
+                        Major @Html.RadioButtonFor(model => model.severity, "Major")
+                        Critical @Html.RadioButtonFor(model => model.severity, "Critical")
                     </div>
                 </div>
                 <!--Can be changed by assignee and admin -->
@@ -74,7 +77,7 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.description, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.EditorFor(model => model.description, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.TextAreaFor(model => model.description, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.version, "", new { @class = "text-danger" })
                     </div>
                 </div>
