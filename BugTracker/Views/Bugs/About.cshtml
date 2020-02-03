@@ -3,80 +3,83 @@
     ViewBag.Title = "About";
 }
 <!--About a eklemeler yapılabilir admin için ekstra vs-->
-<h2>Statistics</h2>
-<table border="1">
-    <tr>
-        <td>
-            Total Number of Bugs
-        </td>
-        <td>
-            @ViewBag.total
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Open Bugs
-        </td>
-        <td>
-            @ViewBag.open
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Closed Bugs
-        </td>
-        <td>
-            @ViewBag.closed
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Total Number of Users
-        </td>
-        <td>
-            @ViewBag.users
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Total Number of Assignees
-        </td>
-        <td>
-            @ViewBag.assignees
-        </td>
-    </tr>
-</table>
-<h3>
-</h3>
-<table border="1">
-    <tr>
-        <th>
-            Filing Date
-        </th>
-        <th>
-            Bugs
-        </th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
+<div class="row top-buffer">
+    <h3 class="display-4">Statistics</h3>
+</div>
+<div class="row top-buffer">
+    <table class="table table-striped text-center table-bordered">
+        <tr>
+            <th>
+                Total Bug Count
+            </th>
+            <th>
+                Open Bug Count
+            </th>
+            <th>
+                Closed Bug Count
+            </th>
+            <th>
+                User Count
+            </th>
+            <th>
+                Assignee Count
+            </th>
+        </tr>
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.FileDate)
+                @ViewBag.total
             </td>
             <td>
-                @item.FileCount
+                @ViewBag.open
+            </td>
+            <td>
+                @ViewBag.closed
+            </td>
+            <td>
+                @ViewBag.users
+            </td>
+            <td>
+                @ViewBag.assignees
             </td>
         </tr>
-    }
-</table>
-@if (Model.HasPreviousPage)
-{
-    @Html.ActionLink("Previous", "About", "Bugs", new { pageNumber = (Model.PageIndex - 1) }, null)
+    </table>
+    <h3>
+    </h3>
+    <table class="table table-striped text-center table-bordered">
+        <tr>
+            <th>
+                Filing Date
+            </th>
+            <th>
+                Bugs
+            </th>
+        </tr>
 
-}
-@if (Model.HasNextPage)
-{
-    @Html.ActionLink("Next", "About", "Bugs", new { pageNumber = (Model.PageIndex + 1) }, null)
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FileDate)
+                </td>
+                <td>
+                    @item.FileCount
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+<div class="row text-center top-buffer">
+    <div class="col">
+        @if (Model.HasPreviousPage)
+        {
+            @Html.ActionLink("Previous", "About", "Bugs", new { pageNumber = (Model.PageIndex - 1) }, new { @class = "btn btn-outline-primary" })
 
+        }
+    </div>
+    <div class="col">
+        @if (Model.HasNextPage)
+        {
+            @Html.ActionLink("Next", "About", "Bugs", new { pageNumber = (Model.PageIndex + 1) }, new { @class = "btn btn-outline-primary" })
+        }
+    </div>
+</div>

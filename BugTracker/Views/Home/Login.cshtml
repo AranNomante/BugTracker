@@ -4,12 +4,13 @@
     ViewBag.Title = "Login";
 
 }
-<section>
-    <div>
-        @using (Html.BeginForm("Verify", "Home", FormMethod.Post))
-        {
-            <fieldset>
-                <legend>Login</legend>
+    
+        <div class="row top-buffer">
+            <h3 class="display-4">Login</h3>
+        </div>
+        <div class="row top-buffer">
+            @using (Html.BeginForm("Verify", "Home", FormMethod.Post))
+            {
                 <div class="form-group">
                     <label for="exampleInputEmail1">Email address</label>
                     @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @id = "exampleInputEmail1", @placeholder = "email@example.com" })
@@ -20,7 +21,5 @@
                     @Html.PasswordFor(m => m.Password, new { @class = "form-control", @id = "exampleInputPassword1", @placeholder = "Password" })
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
-            </fieldset>
-        }
-    </div>
-</section>
+            }
+        </div>

@@ -63,8 +63,8 @@ namespace BugTracker.Code
             //always called when cookie:name exists
             HttpCookie cu = controller.Request.Cookies["user"];
             HttpCookie cc = controller.Request.Cookies["clearance"];
-            cu.Expires = DateTime.Now.AddMinutes(1);
-            cc.Expires = DateTime.Now.AddMinutes(1);
+            cu.Expires = DateTime.Now.AddMinutes(10);
+            cc.Expires = DateTime.Now.AddMinutes(10);
             controller.Response.Cookies.Set(cu);
             controller.Response.Cookies.Set(cc);
         }

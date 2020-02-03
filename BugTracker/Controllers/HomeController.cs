@@ -21,11 +21,6 @@ namespace BugTracker.Controllers
             ViewBag.msg = helper.CheckCk();
             return View();
         }
-        public ActionResult Admin()
-        {
-            ViewBag.msg = helper.CheckCk();
-            return View();
-        }
 
         public ActionResult Login()
         {
@@ -70,13 +65,13 @@ namespace BugTracker.Controllers
                 HttpCookie usr = new HttpCookie("user")
                 {
                     Value = helper.Encode(helper.Encrypt(flag.Email, flag.Title)),
-                    Expires = DateTime.Now.AddMinutes(1),
+                    Expires = DateTime.Now.AddMinutes(10),
                     HttpOnly = true
                 };
                 HttpCookie clr = new HttpCookie("clearance")
                 {
                     Value = flag.Title,
-                    Expires = DateTime.Now.AddMinutes(1),
+                    Expires = DateTime.Now.AddMinutes(10),
                     HttpOnly = true
                 };
                 Response.Cookies.Add(usr);

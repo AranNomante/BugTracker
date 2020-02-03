@@ -2,57 +2,84 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>@ViewBag.Title</title>
-
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="~/Content/Site.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </head>
 <body>
-    <header>Bug Tracker</header>
-    <nav>
-        <ul>
-            <li class="navbar-link">
-                @Html.ActionLink("Home", "Index", "Home")
-            </li>
-            <li class="navbar-link">
-                @Html.ActionLink("Bugs", "Index", "Bugs")
-            </li>
-            @if (ViewBag.msg.Equals("admin"))
-            {
-                <li class="navbar-link">
-                    @Html.ActionLink("Admin Panel", "Admin", "Home")
-                </li>
-            }
-            else if (ViewBag.msg.Equals("user"))
-            {
-                <li class="navbar-link">
-                    @Html.ActionLink("User Panel", "Stats", "Users")
-                </li>
-            }
-            else if (ViewBag.msg.Equals("assignee"))
-            {
-                <li class="navbar-link">
-                    @Html.ActionLink("Assignee Panel", "Stats", "Assignees")
-                </li>
-            }
-            <li class="navbar-link">
-                @if (Request.Cookies["user"] != null)
-                {
-                    @Html.ActionLink("Logout", "Logout", "Home")
-                }
-                else
-                {
-                    @Html.ActionLink("Login", "Login", "Home")
-                }
+    <div class="container">
 
-            </li>
+        <nav class="navbar navbar-expand-lg navbar-light bg-warning">
+            @Html.ActionLink("Bug Tracker", "Index", "Home", null, new { @class = "navbar-brand" })
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-        </ul>
-    </nav>
-    <div class="container body-content">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        @Html.ActionLink("Home", "Index", "Home", null, new { @class = "nav-link" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Bugs", "Index", "Bugs", null, new { @class = "nav-link" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Statistics", "About", "Bugs", null, new { @class = "nav-link" })
+                    </li>
+                    @if (!ViewBag.msg.Equals("no"))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Panel
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @if (ViewBag.msg.Equals("admin"))
+                                {
+                                    if (ViewBag.adm.Equals("m"))
+                                    {
+                                        @Html.ActionLink("Admins", "Index", "Admins", null, new { @class = "dropdown-item" })
+                                        <div class="dropdown-divider"></div>
+                                    }
+                                    @Html.ActionLink("Assignees", "Index", "Assignees", null, new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Users", "Index", "Users", null, new { @class = "dropdown-item" })
+                                }
+                                else if (ViewBag.msg.Equals("user"))
+                                {
+                                    @Html.ActionLink("User", "Stats", "Users", null, new { @class = "dropdown-item" })
+                                }
+                                else
+                                {
+                                    @Html.ActionLink("Assignee", "Stats", "Assignees", null, new { @class = "dropdown-item" })
+                                }
+                            </div>
+                        </li>
+                    }
+                    <li class="nav-item">
+                        @if (Request.Cookies["user"] != null)
+                        {
+                            @Html.ActionLink("Logout", "Logout", "Home", null, new { @class = "nav-link" })
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Login", "Login", "Home", null, new { @class = "nav-link" })
+                        }
+                    </li>
+
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+
+    <div class="container">
         @RenderBody()
     </div>
-    <footer>BT 2020</footer>
-
-
+    <div class="container top-buffer">
+        <footer>Altug Ceylan 2020</footer>
+    </div>
 </body>
 </html>

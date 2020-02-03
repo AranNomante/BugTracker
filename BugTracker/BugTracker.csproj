@@ -100,6 +100,12 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\banner-background.png" />
+    <Content Include="Content\Images\button-background.png" />
+    <Content Include="Content\Images\main-background.png" />
+    <Content Include="Content\Images\newdotnetlogosmall.png" />
+    <Content Include="Content\Images\search.png" />
+    <Content Include="Content\Images\text-background.png" />
     <Content Include="Content\Site.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -122,6 +128,7 @@
     <Content Include="Models\Model1.edmx.diagram">
       <DependentUpon>Model1.edmx</DependentUpon>
     </Content>
+    <Content Include="Content\Images\Thumbs.db" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -212,7 +219,6 @@
     <Content Include="Views\Users\Delete.cshtml" />
     <Content Include="Views\Users\Edit.cshtml" />
     <Content Include="Views\Users\Index.cshtml" />
-    <Content Include="Views\Home\Admin.cshtml" />
     <Content Include="Views\Assignees\Stats.cshtml" />
     <Content Include="Views\Users\Stats.cshtml" />
     <None Include="Web.Debug.config">
