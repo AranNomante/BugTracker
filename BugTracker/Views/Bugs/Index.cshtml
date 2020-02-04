@@ -81,36 +81,36 @@
     <table class="table table-striped text-center table-bordered">
         <tr>
             <th>
-                @Html.ActionLink("Title", "Index", "Bugs", new { sortOrder = ViewData["order"], sortColumn = "title", currentFilter = ViewData["CurrentFilter"], filter = ViewData["filter"] }, null)
+                @Html.ActionLink("Title", "Index", "Bugs", new { sortOrder = ViewData["order"], sortColumn = "title", currentFilter = ViewData["CurrentFilter"], filter = ViewData["filter"] }, new { @class="text-primary" })
 
             </th>
             <th>
-                @Html.ActionLink("Severity", "Index", "Bugs", new { sortOrder = ViewData["order"], sortColumn = "severity", currentFilter = ViewData["CurrentFilter"], filter = ViewData["filter"] }, null)
+                @Html.ActionLink("Severity", "Index", "Bugs", new { sortOrder = ViewData["order"], sortColumn = "severity", currentFilter = ViewData["CurrentFilter"], filter = ViewData["filter"] },  new { @class="text-primary" })
             </th>
             <th>
-                @Html.ActionLink("Version", "Index", "Bugs", new { sortOrder = ViewData["order"], sortColumn = "version", currentFilter = ViewData["CurrentFilter"], filter = ViewData["filter"] }, null)
+                @Html.ActionLink("Version", "Index", "Bugs", new { sortOrder = ViewData["order"], sortColumn = "version", currentFilter = ViewData["CurrentFilter"], filter = ViewData["filter"] },  new { @class="text-primary" })
             </th>
             <th>
-                @Html.ActionLink("State", "Index", "Bugs", new { sortOrder = ViewData["order"], sortColumn = "state", currentFilter = ViewData["CurrentFilter"], filter = ViewData["filter"] }, null)
+                @Html.ActionLink("State", "Index", "Bugs", new { sortOrder = ViewData["order"], sortColumn = "state", currentFilter = ViewData["CurrentFilter"], filter = ViewData["filter"] },  new { @class="text-primary" })
             </th>
             <th>
-                @Html.ActionLink("Submit Time", "Index", "Bugs", new { sortOrder = ViewData["order"], sortColumn = "submit", currentFilter = ViewData["CurrentFilter"], filter = ViewData["filter"] }, null)
+                @Html.ActionLink("Submit Time", "Index", "Bugs", new { sortOrder = ViewData["order"], sortColumn = "submit", currentFilter = ViewData["CurrentFilter"], filter = ViewData["filter"] },  new { @class="text-primary" })
             </th>
             <th>
-                @Html.ActionLink("Fix Time", "Index", "Bugs", new { sortOrder = ViewData["order"], sortColumn = "fix", currentFilter = ViewData["CurrentFilter"], filter = ViewData["filter"] }, null)
+                @Html.ActionLink("Fix Time", "Index", "Bugs", new { sortOrder = ViewData["order"], sortColumn = "fix", currentFilter = ViewData["CurrentFilter"], filter = ViewData["filter"] },  new { @class="text-primary" })
             </th>
             @if (ViewBag.msg.Equals("admin"))
             {
                 <th>
-                    User
-                </th>
+                    <p class="text-secondary"> User</p>
+</th>
                 <th>
-                    Assignee
-                </th>
+                    <p class="text-secondary"> Assignee</p>
+</th>
             }
             <th>
-                Operations
-            </th>
+                <p class="text-secondary"> Operations</p>
+</th>
         </tr>
         <!--Display the items-->
         @if (Model != null)
@@ -181,7 +181,7 @@
         }
         else
         {
-            <input type="button" value="Previous" class="btn"/>
+            <input type="button" value="Previous" class="btn btn-warning"/>
         }
     </div>
     <div class="col">
@@ -197,7 +197,7 @@
         }
         else
         {
-        <input type="button" value="Next" class="btn" />
+        <input type="button" value="Next" class="btn btn-warning" />
         }
     </div>
 

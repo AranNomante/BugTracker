@@ -6,87 +6,105 @@
 <!--Delete Değişmeyecek-->
 @if (ViewBag.msg.Equals("admin"))
 {
-
-
-    <h3>Are you sure you want to delete this?</h3>
-    <div>
-        <h4>Bug</h4>
-        <hr />
-        <dl class="dl-horizontal">
-            <dt>
-                @Html.DisplayNameFor(model => model.title)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.title)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.severity)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.severity)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.state)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.state)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.submit_time)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.submit_time)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.version)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.version)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.fix_time)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.fix_time)
-            </dd>
-
-            <dt>
-                Assignee
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Assignee1.email)
-            </dd>
-
-            <dt>
-                User
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.User.email)
-            </dd>
-
-        </dl>
-
-        @using (Html.BeginForm("Delete", "Bugs", FormMethod.Post))
-        {
-            <input type="hidden" name="prevPage" value="@ViewBag.urlPrev" />
-            <input type="hidden" name="id" value="@Model.id" />
-            <div class="form-actions no-color">
-                <input type="submit" value="Delete" class="btn btn-default" /> |
-                <a href="@ViewBag.urlPrev">Previous Page</a>
-            </div>
-        }
+    <div class="row col-md-12 top-buffer">
+        <div class="col col-md-12">
+            <h3 class="display-4">Delete</h3>
+        </div>
     </div>
+    <div class="row col-md-12 top-buffer">
+        <div class="col col-md-12">
+            <h2 class="text-danger">Are you sure you want to delete this?</h2>
+        </div>
+    </div>
+    <div class="row top-buffer col-md-12">
+        <div class="col col-md-12">
+            <table class="table table-striped text-center table-bordered">
+                <tr>
+                    <th>
+                        <p class="text-secondary">Severity</p>
+</th>
+                    <th>
+                        <p class="text-secondary"> State</p>
+</th>
+                    <th>
+                        <p class="text-secondary">  Submit Time</p>
+</th>
+                    <th>
+                        <p class="text-secondary"> Version</p>
+</th>
+                    <th>
+                        <p class="text-secondary"> Fix Time</p>
+</th>
+
+                    <th>
+                        <p class="text-secondary"> Assignee Email</p>
+</th>
+                    <th>
+                        <p class="text-secondary">User Email</p>
+</th>
+
+
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => model.severity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.state)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.submit_time)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.version)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.fix_time)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Assignee1.email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.User.email)
+                    </td>
+
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <th>
+                         <p class="text-secondary">User Description</p>
+                    </th>
+                    <th>
+                        <p class="text-secondary">Fix Description</p>
+</th>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.TextAreaFor(model => model.description, new { @readonly = "readonly" })
+                    </td>
+                    <td>
+                        @Html.TextAreaFor(model => model.fix_description, new { @readonly = "readonly" })
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
+
+    using (Html.BeginForm("Delete", "Bugs", FormMethod.Post))
+    {
+        <input type="hidden" name="prevPage" value="@ViewBag.urlPrev" />
+        <input type="hidden" name="id" value="@Model.id" />
+        <div class="row top-buffer text-center col-md-12">
+            <div class="col col-md-6">
+                <a class = "btn btn-outline-primary" href="@ViewBag.urlPrev">Previous Page</a>
+            </div>
+            <div class="col col-md-6">
+                <input type="submit" value="Delete" class="btn btn-outline-primary" />
+            </div>
+        </div>
+    }
 }

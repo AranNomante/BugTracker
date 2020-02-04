@@ -6,62 +6,86 @@
 
 <!--Create değişecek-->
 @if (ViewBag.msg.Equals("user"))
-{
+{<div class="row col-md-12 top-buffer">
+    <div class="col col-md-12">
+        <h3 class="display-4">Create</h3>
+    </div>
+</div>
 
-    using (Html.BeginForm("Create", "Bugs", FormMethod.Post, new { enctype = "multipart/form-data",name="create" }))
+    using (Html.BeginForm("Create", "Bugs", FormMethod.Post, new { enctype = "multipart/form-data", name = "create" }))
     {
 
 
 
-
-        <input type="hidden" name="prevPage" value="@ViewBag.urlPrev" />
-        <div class="form-horizontal">
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            <div class="form-group">
-                @Html.LabelFor(model => model.title, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control",maxlength=255, name="title"} })
-                    @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
+        <div class="row col-md-12 top-buffer">
+            <input type="hidden" name="prevPage" value="@ViewBag.urlPrev" />
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    <div class="row col-md-12">
+                        <div class="col col-md-12">
+                            <h5 class="badge badge-primary col-md-2">Title</h5>
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control", maxlength = 255, name = "title" } })
+                        @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.severity, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    Trivial @Html.RadioButtonFor(model => model.severity, "Trivial", new { Checked = "checked" })
-                    Minor @Html.RadioButtonFor(model => model.severity, "Minor")
-                    Major @Html.RadioButtonFor(model => model.severity, "Major")
-                    Critical @Html.RadioButtonFor(model => model.severity, "Critical")
+                <div class="form-group">
+                    <div class="row col-md-12">
+                        <div class="col col-md-12">
+                            <h5 class="badge badge-primary col-md-2">Severity</h5>
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+                        Trivial @Html.RadioButtonFor(model => model.severity, "Trivial", new { Checked = "checked" })
+                        Minor @Html.RadioButtonFor(model => model.severity, "Minor")
+                        Major @Html.RadioButtonFor(model => model.severity, "Major")
+                        Critical @Html.RadioButtonFor(model => model.severity, "Critical")
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.version, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.version, new { htmlAttributes = new { @class = "form-control",maxlength=45, name="version"  } })
-                    @Html.ValidationMessageFor(model => model.version, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    <div class="row col-md-12">
+                        <div class="col col-md-12">
+                            <h5 class="badge badge-primary col-md-2">Version</h5>
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.version, new { htmlAttributes = new { @class = "form-control", maxlength = 45, name = "version" } })
+                        @Html.ValidationMessageFor(model => model.version, "", new { @class = "text-danger" })
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.description, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">            
-                    @Html.TextAreaFor(model => model.description, new { htmlAttributes = new { @class = "form-control", maxlength=4000,name="description" } })
-                    @Html.ValidationMessageFor(model => model.description, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    <div class="row col-md-12">
+                        <div class="col col-md-12">
+                            <h5 class="badge badge-primary col-md-2">Description</h5>
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+                        @Html.TextAreaFor(model => model.description, new { htmlAttributes = new { @class = "form-control", maxlength = 4000, name = "description" } })
+                        @Html.ValidationMessageFor(model => model.description, "", new { @class = "text-danger" })
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                @Html.Label("Screenshot", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    <input type="file" name="postedFile" multiple"/>
-                    <br />
+                <div class="form-group">
+                    <div class="row col-md-12">
+                        <div class="col col-md-12">
+                            <h5 class="badge badge-primary col-md-2">Screenshot</h5>
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+                        <input type="file" name="postedFile" multiple" />
+                        <br />
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Create" class="btn btn-default"/>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Create" class="btn btn-default" />
+                    </div>
                 </div>
             </div>
         </div>

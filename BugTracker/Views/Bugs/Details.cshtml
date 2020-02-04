@@ -8,42 +8,44 @@
         <h3 class="display-4">Details</h3>
     </div>
 </div>
-<div class="row top-buffer col-md-12">
-    <div class="col col-md-12">
-        <h5 class="badge badge-primary">Details of "@Model.title"</h5>
-    </div>
-</div>
+
 <div class="row top-buffer col-md-12">
     <div class="col col-md-12">
         <table class="table table-striped text-center table-bordered">
             <tr>
                 <th>
-                    Severity
+                    <p class="text-secondary">Title</p>
                 </th>
                 <th>
-                    State
+                    <p class="text-secondary">Severity</p>
                 </th>
                 <th>
-                    Submit Time
-                </th>
+                    <p class="text-secondary"> State</p>
+</th>
                 <th>
-                    Version
-                </th>
+                    <p class="text-secondary">Submit Time</p>
+</th>
                 <th>
-                    Fix Time
-                </th>
+                    <p class="text-secondary">Version</p>
+</th>
+                <th>
+                    <p class="text-secondary">Fix Time</p>
+</th>
                 @if (!ViewBag.msg.Equals("user") && !ViewBag.msg.Equals("no"))
                 {
                     <th>
-                        Assignee Email
-                    </th>
+                        <p class="text-secondary"> Assignee Email</p>
+</th>
                     <th>
-                        User Email
-                    </th>
+                        <p class="text-secondary">User Email</p>
+</th>
                 }
 
             </tr>
             <tr>
+                <td>
+                    @Html.DisplayFor(model => model.title)
+                </td>
                 <td>
                     @Html.DisplayFor(model => model.severity)
                 </td>
@@ -73,10 +75,10 @@
         <table>
             <tr>
                 <th>
-                    User Description
+                   <p class="text-secondary"> User Description </p>
                 </th>
                 <th>
-                    Fix Description
+                    <p class="text-secondary">Fix Description </p>
                 </th>
             </tr>
             <tr>
@@ -93,7 +95,7 @@
 <hr />
 <div class="row top-buffer col-md-12">
     <div class="col col-md-12">
-        <h5 class="badge badge-primary">Image of the issue</h5>
+        <p class="text-secondary">Image of the issue</p>
     </div>
 </div>
 
@@ -116,19 +118,32 @@
     </div>
 </div>
 <div class="row top-buffer text-center col-md-12">
-    <div class="col col-md-6">
-        <a href="@ViewBag.urlPrev" class="btn btn-outline-primary">Previous Page</a>
-    </div>
+
 
     @if (!ViewBag.msg.Equals("no") && !ViewBag.msg.Equals("user"))
     {
         if (ViewBag.msg.Equals("admin") || (Model.assignee != null && Model.assignee.Equals(ViewBag.clrassignee)))
         {<div class="col col-md-6">
+                <a href="@ViewBag.urlPrev" class="btn btn-outline-primary">Previous Page</a>
+            </div>
+            <div class="col col-md-6">
                 @Html.ActionLink("Edit", "Edit", new { id = Model.title, prevPage = Request.Url.ToString() }, new { @class = "btn btn-outline-primary" })
             </div>
         }
-
+        else
+        {
+            <div class="col col-md-12">
+                <a href="@ViewBag.urlPrev" class="btn btn-outline-primary">Previous Page</a>
+            </div>
+        }
     }
+    else
+    {
+        <div class="col col-md-12">
+            <a href="@ViewBag.urlPrev" class="btn btn-outline-primary">Previous Page</a>
+        </div>
+    }
+    
 
 
 </div>

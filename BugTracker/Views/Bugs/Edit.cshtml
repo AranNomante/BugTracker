@@ -3,16 +3,20 @@
     ViewBag.Title = "Edit";
 }
 
-<div class="row top-buffer">
-    <h3 class="display-4">Edit</h3>
+<div class="row col-md-12 top-buffer">
+    <div class="col col-md-12">
+        <h3 class="display-4">Edit</h3>
+    </div>
 </div>
-<div class="row top-buffer">
-    <h1>Editing "@Model.title"</h1>
+<div class="row col-md-12 top-buffer">
+    <div class="col col-md-12">
+        <h1 class="text-secondary">Editing "@Model.title"</h1>
+    </div>
 </div>
 <div class="row top-buffer">
 
 
-    @using (Html.BeginForm("Edit", "Bugs", FormMethod.Post, new { enctype = "multipart/form-data",name="edit" }))
+    @using (Html.BeginForm("Edit", "Bugs", FormMethod.Post, new { enctype = "multipart/form-data", name = "edit" }))
     {
 
         if (!ViewBag.msg.Equals("no") && !ViewBag.msg.Equals("user"))
@@ -32,34 +36,37 @@
                 @Html.HiddenFor(model => model.id)
                 <div class="row col-md-12 top-buffer">
                     <div class="col col-md-12">
-                        <h5 class="badge badge-primary">Title</h5>
+                        <p class="text-secondary">Title</p>
                     </div>
                 </div>
-                <div class="row col-md12">
+                <div class="row col-md-12">
                     <div class="col col-md-12">
-                        @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control", maxlength = 255,name="title" } })
+                        @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control", maxlength = 255, name = "title" } })
                         @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="row col-md-12 top-buffer">
-                    <h5 class="badge badge-primary">Currently Assigned:@Model.assignee</h5>
+                    <div class="col-md-12">
+                        <p class="text-secondary">Currently Assigned</p> <b> @Model.assignee</b>
+                    </div>
+
                 </div>
                 <div class="row col-md-12 top-buffer">
                     <div class="col-md-4">
-                        <h5 class="badge badge-primary">Version</h5>
+                        <p class="text-secondary">Version</p>
                     </div>
                     <div class="col-md-4">
-                        <h5 class="badge badge-primary">Severity</h5>
+                        <p class="text-secondary">Severity</p>
                     </div>
                     <div class="col-md-4">
                         @if (ViewBag.msg.Equals("admin"))
                         {
-                            <h5 class="badge badge-primary">Assignee</h5>}
+                            <p class="text-secondary">Assignee</p>}
                     </div>
                 </div>
                 <div class="row col-md-12">
                     <div class="col col-md-4">
-                        @Html.EditorFor(model => model.version, new { htmlAttributes = new { @class = "form-control", maxlength = 45,name="version" } })
+                        @Html.EditorFor(model => model.version, new { htmlAttributes = new { @class = "form-control", maxlength = 45, name = "version" } })
                         @Html.ValidationMessageFor(model => model.version, "", new { @class = "text-danger" })
                     </div>
 
@@ -87,25 +94,25 @@
 
                 <div class="row top-buffer col-md-12">
                     <div class="col-md-6">
-                        <h5 class="badge badge-primary">Fix Description</h5>
+                        <p class="text-secondary">Fix Description</p>
                     </div>
                     <div class="col-md-6">
-                        <h5 class="badge badge-primary">Description</h5>
+                        <p class="text-secondary">Description</p>
                     </div>
                 </div>
                 <div class="row col-md-12">
                     <div class="col-md-6">
-                        @Html.TextAreaFor(model => model.fix_description, new { htmlAttributes = new { @class = "form-control", maxlength = 4000,name="fdescription" } })
+                        @Html.TextAreaFor(model => model.fix_description, new { htmlAttributes = new { @class = "form-control", maxlength = 4000, name = "fdescription" } })
                         @Html.ValidationMessageFor(model => model.version, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-md-6">
-                        @Html.TextAreaFor(model => model.description, new { htmlAttributes = new { @class = "form-control", maxlength = 4000 ,name="description"} })
+                        @Html.TextAreaFor(model => model.description, new { htmlAttributes = new { @class = "form-control", maxlength = 4000, name = "description" } })
                         @Html.ValidationMessageFor(model => model.version, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="row-md-12 top-buffer">
                     <div class="col col-md-12">
-                        <h5 class="badge badge-primary">Image of the Issue</h5>
+                        <p class="text-secondary">Image of the Issue</p>
                     </div>
                 </div>
                 <div class="row col-md-12">
@@ -127,14 +134,16 @@
                     </div>
                 </div>
                 <div class="row col-md-12 top-buffer">
-                    <div class="col col-md-4">
-                        <a href="@ViewBag.urlPrev" class="btn btn-outline-primary">Previous Page</a>
-                    </div>
-                    <div class="col col-md-4">
+                    <div class="col col-md-12">
                         <input type="file" name="postedFile" multiple />
                     </div>
-                    <div class="col col-md-4">
-                        <input type="submit" value="Save" class="btn btn-success" />
+                </div>
+                <div class="row col-md-12 top-buffer text-center">
+                    <div class="col col-md-6">
+                        <a href="@ViewBag.urlPrev" class="btn btn-outline-primary">Previous Page</a>
+                    </div>
+                    <div class="col col-md-6">
+                        <input type="submit" value="Save" class="btn btn-outline-primary" />
                     </div>
 
                 </div>
