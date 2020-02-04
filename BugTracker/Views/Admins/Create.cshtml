@@ -9,7 +9,7 @@
 {
     if (ViewBag.adm.Equals("m"))
     {
-        using (Html.BeginForm("Create", "Admins", FormMethod.Post))
+        using (Html.BeginForm("Create", "Admins", FormMethod.Post,new {name="admcreate" }))
         {
 
             <input type="hidden" name="prevPage" value="@ViewBag.urlPrev" />
@@ -20,7 +20,7 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.email, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control",name="email"  } })
                         @Html.ValidationMessageFor(model => model.email, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -28,7 +28,7 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.password, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.PasswordFor(model => model.password, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.PasswordFor(model => model.password, new { htmlAttributes = new { @class = "form-control",name="password" } })
                         @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
                     </div>
                 </div>

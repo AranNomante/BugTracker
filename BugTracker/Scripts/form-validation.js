@@ -9,15 +9,33 @@ $(function () {
             // The key name on the left side is the name attribute
             // of an input field. Validation rules are defined
             // on the right side
-            title: "required",
-            description: "required",
-            version: "required"
+            title: {
+                required: true,
+                maxlength: 255
+            },
+            description: {
+                required: true,
+                maxlength: 4000
+            },
+            version: {
+                required: true,
+                maxlength: 45
+            }
         },
         // Specify validation error messages
         messages: {
-            title: "Please enter a title",
-            description: "Please enter a description",
-            version: "Please enter a version"
+            title: {
+                required: "Please enter a title",
+                maxlength: "Title is too long"
+            },
+            description: {
+                required: "Please enter a description",
+                maxlength: "Description is too long"
+            },
+            version: {
+                required: "Please enter a version",
+                maxlength: "Version too long"
+            }
         },
         // Make sure the form is submitted to the destination defined
         // in the "action" attribute of the form when valid
@@ -31,15 +49,37 @@ $(function () {
             // The key name on the left side is the name attribute
             // of an input field. Validation rules are defined
             // on the right side
-            title: "required",
-            description: "required",
-            version: "required"
+            title: {
+                required: true,
+                maxlength: 255
+            },
+            description: {
+                required: true,
+                maxlength: 4000
+            },
+            version: {
+                required: true,
+                maxlength: 45
+            },
+            fdescription: {
+                maxlength:4000
+            }
         },
         // Specify validation error messages
         messages: {
-            title: "Please enter a title",
-            description: "Please enter a description",
-            version: "Please enter a version"
+            title: {
+                required: "Please enter a title",
+                maxlength: "Title is too long"
+            },
+            description: {
+                required: "Please enter a description",
+                maxlength: "Description is too long"
+            },
+            version: {
+                required: "Please enter a version",
+                maxlength: "Version too long"
+            },
+            fdescription: "Fix Description is too long" 
         },
         // Make sure the form is submitted to the destination defined
         // in the "action" attribute of the form when valid
@@ -53,11 +93,15 @@ $(function () {
             // The key name on the left side is the name attribute
             // of an input field. Validation rules are defined
             // on the right side
-            password: "required"
+            password: {
+                required: true,
+                maxlength: 10
+            }
         },
         // Specify validation error messages
-        messages: {
-            password: "Please enter a password"
+        password: {
+            required: "Please enter a password",
+            maxlength: "Password too long"
         },
         // Make sure the form is submitted to the destination defined
         // in the "action" attribute of the form when valid
@@ -73,14 +117,137 @@ $(function () {
             // on the right side
             email: {
                 required: true,
-                email: true
+                email: true,
+                maxlength:254
             },
-            password: "required"
+            password: {
+                required: true,
+                maxlength: 10
+            }
         },
         // Specify validation error messages
         messages: {
-            email: "Please enter a valid email address",
-            password: "Please enter a password"
+            email: {
+                required: "Please enter an email",
+                email: "Please enter a valid email",
+                maxlength: "Email too long"
+            },
+            password: {
+                required: "Please enter a password",
+                maxlength: "Password too long"
+            }
+        },
+        // Make sure the form is submitted to the destination defined
+        // in the "action" attribute of the form when valid
+        submitHandler: function (form) {
+            form.submit();
+        }
+    });
+    $("form[name='usedit']").validate({
+        // Specify validation rules
+        rules: {
+            // The key name on the left side is the name attribute
+            // of an input field. Validation rules are defined
+            // on the right side
+            password: {
+                required: true,
+                maxlength: 10
+            }
+        },
+        // Specify validation error messages
+        password: {
+            required: "Please enter a password",
+            maxlength: "Password too long"
+        },
+        // Make sure the form is submitted to the destination defined
+        // in the "action" attribute of the form when valid
+        submitHandler: function (form) {
+            form.submit();
+        }
+    });
+    $("form[name='uscreate']").validate({
+        // Specify validation rules
+        rules: {
+            // The key name on the left side is the name attribute
+            // of an input field. Validation rules are defined
+            // on the right side
+            email: {
+                required: true,
+                email: true,
+                maxlength: 254
+            },
+            password: {
+                required: true,
+                maxlength: 10
+            }
+        },
+        // Specify validation error messages
+        messages: {
+            email: {
+                required: "Please enter an email",
+                email: "Please enter a valid email",
+                maxlength: "Email too long"
+            },
+            password: {
+                required: "Please enter a password",
+                maxlength: "Password too long"
+            }
+        },
+        // Make sure the form is submitted to the destination defined
+        // in the "action" attribute of the form when valid
+        submitHandler: function (form) {
+            form.submit();
+        }
+    });
+    $("form[name='admedit']").validate({
+        // Specify validation rules
+        rules: {
+            // The key name on the left side is the name attribute
+            // of an input field. Validation rules are defined
+            // on the right side
+            password: {
+                required: true,
+                maxlength: 10
+            }
+        },
+        // Specify validation error messages
+        password: {
+            required: "Please enter a password",
+            maxlength: "Password too long"
+        },
+        // Make sure the form is submitted to the destination defined
+        // in the "action" attribute of the form when valid
+        submitHandler: function (form) {
+            form.submit();
+        }
+    });
+    $("form[name='admcreate']").validate({
+        // Specify validation rules
+        rules: {
+            // The key name on the left side is the name attribute
+            // of an input field. Validation rules are defined
+            // on the right side
+            email: {
+                required: true,
+                email: true,
+                maxlength: 254
+            },
+            password: {
+                required: true,
+                maxlength: 10
+            }
+        },
+        // Specify validation error messages
+        messages: {
+            email: {
+                required: "Please enter an email",
+                email: "Please enter a valid email",
+                maxlength: "Email too long"
+            },
+            password: {
+                required: "Please enter a password",
+                maxlength: "Password too long"
+            }
         },
         // Make sure the form is submitted to the destination defined
         // in the "action" attribute of the form when valid

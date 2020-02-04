@@ -41,12 +41,7 @@
                         User Email
                     </th>
                 }
-                <th>
-                    User Description
-                </th>
-                <th>
-                    Fix Description
-                </th>
+
             </tr>
             <tr>
                 <td>
@@ -73,14 +68,25 @@
                         @Html.DisplayFor(model => model.User.email)
                     </td>
                 }
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <th>
+                    User Description
+                </th>
+                <th>
+                    Fix Description
+                </th>
+            </tr>
+            <tr>
                 <td>
-                    @Html.DisplayFor(model => model.description)
+                    @Html.TextAreaFor(model => model.description, new { @readonly = "readonly" })
                 </td>
                 <td>
-                    @Html.DisplayFor(model => model.fix_description)
+                    @Html.TextAreaFor(model => model.fix_description, new { @readonly = "readonly" })
                 </td>
             </tr>
-
         </table>
     </div>
 </div>

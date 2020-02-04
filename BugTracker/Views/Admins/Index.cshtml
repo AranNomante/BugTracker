@@ -77,7 +77,7 @@
                                 <li> @Html.ActionLink("Edit", "Edit", new { id = item.email.Split('.')[0], prevPage = Request.Url.ToString() }) </li>
                             }
 
-                            @if (ViewBag.adm.Equals("m"))
+                            @if (ViewBag.adm.Equals("m") && !item.email.Split('@')[0].Equals("master"))
                             {
                                 <li> @Html.ActionLink("Delete", "Delete", new { id = item.email.Split('.')[0], prevPage = Request.Url.ToString() }) </li>
                             }
