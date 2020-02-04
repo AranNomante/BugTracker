@@ -22,108 +22,122 @@
 
 
                 <input type="hidden" name="prevPage" value="@ViewBag.urlPrev" />
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                    @Html.HiddenFor(model => model.title)
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-                    @Html.HiddenFor(model => model.submitter)
+                @Html.HiddenFor(model => model.submitter)
 
-                    @Html.HiddenFor(model => model.submit_time)
+                @Html.HiddenFor(model => model.submit_time)
 
-                    @Html.HiddenFor(model => model.fix_time)
-
-
-
-                    <div class="row col-md-12 top-buffer">
-                        <h5 class="badge badge-primary">Currently Assigned:@Model.assignee</h5>
+                @Html.HiddenFor(model => model.fix_time)
+                @Html.HiddenFor(model => model.id)
+                <div class="row col-md-12 top-buffer">
+                    <div class="col col-md-12">
+                        <h5 class="badge badge-primary">Title</h5>
                     </div>
-                    <div class="row col-md-12 top-buffer">
-                        <div class="col-md-4">
-                            <h5 class="badge badge-primary">Version</h5>
-                        </div>
-                        <div class="col-md-4">
-                            <h5 class="badge badge-primary">Severity</h5>
-                        </div>
-                        <div class="col-md-4">
-                            @if (ViewBag.msg.Equals("admin"))
-                            {
-                                <h5 class="badge badge-primary">Assignee</h5>}
-                        </div>
+                </div>
+                <div class="row col-md12">
+                    <div class="col col-md-12">
+                        @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control", maxlength = 255 } })
+                        @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
                     </div>
-                    <div class="row col-md-12">
-                        <div class="col col-md-4">
-                            @Html.EditorFor(model => model.version, new { htmlAttributes = new { @class = "form-control", maxlength = 45 } })
-                            @Html.ValidationMessageFor(model => model.version, "", new { @class = "text-danger" })
-                        </div>
-
-                        <div class="col col-md-4">
-                            <b>Trivial</b> @Html.RadioButtonFor(model => model.severity, "Trivial")
-                            <b>Minor</b> @Html.RadioButtonFor(model => model.severity, "Minor")
-                            <b>Major</b> @Html.RadioButtonFor(model => model.severity, "Major")
-                            <b>Critical</b> @Html.RadioButtonFor(model => model.severity, "Critical")
-                        </div>
+                </div>
+                <div class="row col-md-12 top-buffer">
+                    <h5 class="badge badge-primary">Currently Assigned:@Model.assignee</h5>
+                </div>
+                <div class="row col-md-12 top-buffer">
+                    <div class="col-md-4">
+                        <h5 class="badge badge-primary">Version</h5>
+                    </div>
+                    <div class="col-md-4">
+                        <h5 class="badge badge-primary">Severity</h5>
+                    </div>
+                    <div class="col-md-4">
                         @if (ViewBag.msg.Equals("admin"))
                         {
-                            <div class="col col-md-4">
-                                @Html.DropDownList("assignee", null, htmlAttributes: new { @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.assignee, "", new { @class = "text-danger" })
-                            </div> }
+                            <h5 class="badge badge-primary">Assignee</h5>}
+                    </div>
+                </div>
+                <div class="row col-md-12">
+                    <div class="col col-md-4">
+                        @Html.EditorFor(model => model.version, new { htmlAttributes = new { @class = "form-control", maxlength = 45 } })
+                        @Html.ValidationMessageFor(model => model.version, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col col-md-4">
+                        <b>Trivial</b> @Html.RadioButtonFor(model => model.severity, "Trivial")
+                        <b>Minor</b> @Html.RadioButtonFor(model => model.severity, "Minor")
+                        <b>Major</b> @Html.RadioButtonFor(model => model.severity, "Major")
+                        <b>Critical</b> @Html.RadioButtonFor(model => model.severity, "Critical")
+                    </div>
+                    @if (ViewBag.msg.Equals("admin"))
+                    {
+                        <div class="col col-md-4">
+                            @Html.DropDownList("assignee", null, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.assignee, "", new { @class = "text-danger" })
+                        </div> }
+                    else
+                    {
+
+                        @Html.HiddenFor(model => model.assignee)
+                    }
+                </div>
+
+
+                <!--Can be changed by assignee and admin-->
+
+                <div class="row top-buffer col-md-12">
+                    <div class="col-md-6">
+                        <h5 class="badge badge-primary">Fix Description</h5>
+                    </div>
+                    <div class="col-md-6">
+                        <h5 class="badge badge-primary">Description</h5>
+                    </div>
+                </div>
+                <div class="row col-md-12">
+                    <div class="col-md-6">
+                        @Html.TextAreaFor(model => model.fix_description, new { htmlAttributes = new { @class = "form-control", maxlength = 4000, @id = "efd" } })
+                        @Html.ValidationMessageFor(model => model.version, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.TextAreaFor(model => model.description, new { htmlAttributes = new { @class = "form-control", maxlength = 4000 } })
+                        @Html.ValidationMessageFor(model => model.version, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="row-md-12 top-buffer">
+                    <div class="col col-md-12">
+                        <h5 class="badge badge-primary">Image of the Issue</h5>
+                    </div>
+                </div>
+                <div class="row col-md-12">
+                    <div class="col col-md-12">
+                        @if (ViewBag.imgurl != null)
+                        {
+                            foreach (String s in ViewBag.imgurl)
+                            {
+                                if (s != null)
+                                {
+                                    <img src="@s" class="img-fluid" alt="Responsive image" />
+                                }
+                            }
+                        }
                         else
                         {
-
-                            @Html.HiddenFor(model => model.assignee)
+                            <p>No Screenshot</p>
                         }
                     </div>
-
-
-                    <!--Can be changed by assignee and admin-->
-
-                    <div class="row top-buffer col-md-12">
-                        <div class="col-md-6">
-                            <h5 class="badge badge-primary">Fix Description</h5>
-                        </div>
-                        <div class="col-md-6">
-                            <h5 class="badge badge-primary">Description</h5>
-                        </div>
+                </div>
+                <div class="row col-md-12 top-buffer">
+                    <div class="col col-md-4">
+                        <a href="@ViewBag.urlPrev" class="btn btn-outline-primary">Previous Page</a>
                     </div>
-                    <div class="row col-md-12">
-                        <div class="col-md-6">
-                            @Html.TextAreaFor(model => model.fix_description, new { htmlAttributes = new { @class = "form-control", maxlength = 4000, @id = "efd" } })
-                            @Html.ValidationMessageFor(model => model.version, "", new { @class = "text-danger" })
-                        </div>
-                        <div class="col-md-6">
-                            @Html.TextAreaFor(model => model.description, new { htmlAttributes = new { @class = "form-control", maxlength = 4000 } })
-                            @Html.ValidationMessageFor(model => model.version, "", new { @class = "text-danger" })
-                        </div>
+                    <div class="col col-md-4">
+                        <input type="file" name="postedFile" multiple />
                     </div>
-                    <div class="row-md-12 top-buffer">
-                        <div class="col col-md-12">
-                            <h5 class="badge badge-primary">Image of the Issue</h5>
-                        </div>
+                    <div class="col col-md-4">
+                        <input type="submit" value="Save" class="btn btn-success" />
                     </div>
-                    <div class="row col-md-12">
-                        <div class="col col-md-12">
-                            @if (ViewBag.imgurl != null)
-                            {
-                                <img src="@ViewBag.imgurl" class="img-fluid" alt="Responsive image" />
-                            }
-                            else
-                            {
-                                <p>No Screenshot</p>
-                            }
-                        </div>
-                    </div>
-                    <div class="row col-md-12 top-buffer">
-                        <div class="col col-md-4">
-                            <a href="@ViewBag.urlPrev" class="btn btn-outline-primary">Previous Page</a>
-                        </div>
-                        <div class="col col-md-4">
-                            <input type="file" name="postedFile" />
-                        </div>
-                        <div class="col col-md-4">
-                            <input type="submit" value="Save" class="btn btn-success" />
-                        </div>
 
-                    </div>           
+                </div>
             }
         }
     }

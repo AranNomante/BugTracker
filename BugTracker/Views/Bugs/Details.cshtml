@@ -95,7 +95,13 @@
     <div class="col col-md-12">
         @if (ViewBag.imgurl != null)
         {
-            <img src="@ViewBag.imgurl" class="img-fluid" alt="Responsive image" />
+            foreach (String s in ViewBag.imgurl)
+            {
+                if (s != null)
+                {
+                    <img src="@s" class="img-fluid" alt="Responsive image" />
+                }
+            }
         }
         else
         {

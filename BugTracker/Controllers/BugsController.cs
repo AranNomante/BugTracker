@@ -86,7 +86,7 @@ namespace BugTracker.Controllers
             return View(await PaginatedList<BugStats>.CreateAsync(data.AsNoTracking(), pageNumber ?? 1, 10));
         }
         // GET: Bugs/Details/5
-        public async Task<ActionResult> Details(string id, string prevPage)
+        public async Task<ActionResult> Details(int? id, string prevPage)
         {
             ViewBag.urlPrev = prevPage;
             ViewBag.msg = helper.CheckCk();
@@ -99,8 +99,19 @@ namespace BugTracker.Controllers
             {
                 return HttpNotFound();
             }
-
-            ViewBag.imgurl = FetchImgStr(bug.Image);
+            Image[] imgs = (from im in _db.Image where im.id_bug == bug.id select im).DefaultIfEmpty(null).ToArray();
+            String[] imstrs = null;
+            if (imgs != null)
+            {
+                imstrs = new string[imgs.Length];
+                int i = 0;
+                foreach (Image img in imgs)
+                {
+                    imstrs[i] = FetchImgStr(img);
+                    i++;
+                }
+            }
+            ViewBag.imgurl = imstrs;
             return View(bug);
         }
 
@@ -121,7 +132,7 @@ namespace BugTracker.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public async Task<ActionResult> Create([Bind(Include = "title,severity,version,description")] Bug bug, string prevPage, HttpPostedFileBase postedFile)
+        public async Task<ActionResult> Create([Bind(Include = "title,severity,version,description")] Bug bug, string prevPage, HttpPostedFileBase[] postedFile)
         {
             string ustp = helper.CheckCk();
             if (!ustp.Equals("user"))
@@ -130,7 +141,7 @@ namespace BugTracker.Controllers
             }
             ViewBag.urlPrev = prevPage;
             ViewBag.msg = ustp;
-            Image img = FetchImg(postedFile, bug.title);
+            Image[] img = FetchImg(postedFile, bug.id);
             bug.assignee = null;
             bug.submit_time = DateTime.Now;
             bug.fix_time = null;
@@ -145,7 +156,14 @@ namespace BugTracker.Controllers
                 _db.Bug.Add(bug);
                 if (img != null)
                 {
-                    _db.Image.Add(img);
+                    foreach (Image im in img)
+                    {
+                        if (im != null)
+                        {
+
+                            _db.Image.Add(im);
+                        }
+                    }
                 }
                 await _db.SaveChangesAsync();
 
@@ -156,7 +174,7 @@ namespace BugTracker.Controllers
         }
 
         // GET: Bugs/Edit/5
-        public async Task<ActionResult> Edit(string id, string prevPage)
+        public async Task<ActionResult> Edit(int? id, string prevPage)
         {
             string ustp = helper.CheckCk();
             if (!ustp.Equals("admin") && !ustp.Equals("assignee"))
@@ -180,7 +198,19 @@ namespace BugTracker.Controllers
                 emails.Add(new SelectListItem { Text = item.email });
             }
             //display img from imgdataurl
-            ViewBag.imgurl = FetchImgStr(bug.Image);
+            Image[] imgs = (from im in _db.Image where im.id_bug == bug.id select im).DefaultIfEmpty(null).ToArray();
+            String[] imstrs = null;
+            if (imgs != null)
+            {
+                imstrs = new string[imgs.Length];
+                int i = 0;
+                foreach (Image img in imgs)
+                {
+                    imstrs[i] = FetchImgStr(img);
+                    i++;
+                }
+            }
+            ViewBag.imgurl = imstrs;
             ViewBag.assignee = emails;
             ViewBag.submitter = bug.submitter;
             return View(bug);
@@ -190,7 +220,7 @@ namespace BugTracker.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public async Task<ActionResult> Edit([Bind(Include = "title,submitter,assignee,severity,state,submit_time,version,fix_time,description,fix_description")] Bug bug, string prevPage, HttpPostedFileBase postedFile)
+        public async Task<ActionResult> Edit([Bind(Include = "id,title,submitter,assignee,severity,state,submit_time,version,fix_time,description,fix_description")] Bug bug, string prevPage, HttpPostedFileBase[] postedFile)
         {
             string ustp = helper.CheckCk();
             if (!ustp.Equals("admin") && !ustp.Equals("assignee"))
@@ -199,7 +229,7 @@ namespace BugTracker.Controllers
             }
             ViewBag.urlPrev = prevPage;
             ViewBag.msg = ustp;
-            Image img = FetchImg(postedFile, bug.title);
+            Image[] img = FetchImg(postedFile, bug.id);
             if (ModelState.IsValid)
             {
                 if (bug.fix_description != null)
@@ -220,13 +250,23 @@ namespace BugTracker.Controllers
                 }
                 if (img != null)
                 {
-                    if (bug.Image != null)
+                    for (int i = 0; i < img.Length; i++)
                     {
-                        _db.Entry(img).State = EntityState.Modified;
-                    }
-                    else
-                    {
-                        _db.Image.Add(img);
+                        if (img[i] != null)
+                        {
+                            String nm = img[i].Name;
+                            Image q = _db.Image.FirstOrDefault(im => im.id_bug == bug.id && im.Name.Equals(nm));                          
+                            if (q != null)
+                            {
+                                q.Data = img[i].Data;
+                                q.ContentType = img[i].ContentType;
+                                _db.Entry(q).State = EntityState.Modified;
+                            }
+                            else
+                            {
+                                _db.Image.Add(img[i]);
+                            }
+                        }
                     }
                 }
                 _db.Entry(bug).State = EntityState.Modified;
@@ -239,7 +279,7 @@ namespace BugTracker.Controllers
         }
 
         // GET: Bugs/Delete/5
-        public async Task<ActionResult> Delete(string id, string prevPage)
+        public async Task<ActionResult> Delete(int? id, string prevPage)
         {
             string ustp = helper.CheckCk();
             if (!ustp.Equals("admin"))
@@ -247,7 +287,7 @@ namespace BugTracker.Controllers
                 Response.Redirect("/Home");
             }
             ViewBag.urlPrev = prevPage;
-            ViewBag.msg =ustp;
+            ViewBag.msg = ustp;
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -262,7 +302,7 @@ namespace BugTracker.Controllers
 
         // POST: Bugs/Delete/5
         [HttpPost, ActionName("Delete")]
-        public async Task<ActionResult> DeleteConfirmed(string id, string prevPage)
+        public async Task<ActionResult> DeleteConfirmed(int? id, string prevPage)
         {
             string ustp = helper.CheckCk();
             if (!ustp.Equals("admin"))
@@ -292,55 +332,63 @@ namespace BugTracker.Controllers
 
 
 
-        private Image FetchImg(HttpPostedFileBase postedFile, string btitle)
+        private Image[] FetchImg(HttpPostedFileBase[] postedFiles, int bid)
         {
-            Image img = null;
-            Debug.WriteLine("postedfile is null:" + (postedFile == null));
-            if (postedFile != null)
+            Image[] img = null;
+            Debug.WriteLine("postedfile is null:" + (postedFiles == null));
+            if (postedFiles != null)
             {
-                bool extension = Path.GetExtension(postedFile.FileName).ToLower() == ".png";
-                bool content = postedFile.ContentType.ToLower() == "image/png";
-                Debug.WriteLine("Extension:" + (Path.GetExtension(postedFile.FileName).ToLower()) + "\tContent:" + (postedFile.ContentType.ToLower()));
-                if (extension)
+                img = new Image[postedFiles.Length];
+                int i = 0;
+                foreach (HttpPostedFileBase postedFile in postedFiles)
                 {
-                    Debug.WriteLine("IN EXTENSION");
-                    if (content)
+                    if (postedFile != null)
                     {
-                        Debug.WriteLine("IN CONTENT");
-
-                        Debug.WriteLine("ContentLength:" + postedFile.ContentLength);
-                        if (postedFile.ContentLength <= 1024 * 1024 * 8)//up to 8 mb 
+                        bool extension = Path.GetExtension(postedFile.FileName).ToLower() == ".png";
+                        bool content = postedFile.ContentType.ToLower() == "image/png";
+                        Debug.WriteLine("Extension:" + (Path.GetExtension(postedFile.FileName).ToLower()) + "\tContent:" + (postedFile.ContentType.ToLower()));
+                        if (extension)
                         {
-                            Debug.WriteLine("IN LENGTH");
-                            byte[] bytes;
-                            using (BinaryReader br = new BinaryReader(postedFile.InputStream))
+                            Debug.WriteLine("IN EXTENSION");
+                            if (content)
                             {
-                                bytes = br.ReadBytes(postedFile.ContentLength);
+                                Debug.WriteLine("IN CONTENT");
+
+                                Debug.WriteLine("ContentLength:" + postedFile.ContentLength);
+                                if (postedFile.ContentLength <= 1024 * 1024 * 8)//up to 8 mb 
+                                {
+                                    Debug.WriteLine("IN LENGTH");
+                                    byte[] bytes;
+                                    using (BinaryReader br = new BinaryReader(postedFile.InputStream))
+                                    {
+                                        bytes = br.ReadBytes(postedFile.ContentLength);
+                                    }
+                                    Debug.WriteLine("Bytes.len:" + bytes.Length);
+                                    Image imgs = new Image()
+                                    {
+                                        id_bug = bid,
+                                        Name = postedFile.FileName,
+                                        ContentType = postedFile.ContentType,
+                                        Data = bytes
+                                    };
+                                    img[i] = imgs;
+                                    i++;
+                                }
+                                else
+                                {
+                                    //file size too big
+                                }
                             }
-                            Debug.WriteLine("Bytes.len:" + bytes.Length);
-                            img = new Image()
+                            else
                             {
-                                title = btitle,
-                                Name = postedFile.FileName,
-                                ContentType = postedFile.ContentType,
-                                Data = bytes
-                            };
-                            Debug.WriteLine("\n-----------\nImg:\ntitle:" + img.title + "\nName:" + img.Name + "\nContentType:" + img.ContentType +
-                                "\nFinished\n-----------");
+                                //content not png
+                            }
                         }
                         else
                         {
-                            //file size too big
+                            //display message if file extension is not correct
                         }
                     }
-                    else
-                    {
-                        //content not png
-                    }
-                }
-                else
-                {
-                    //display message if file extension is not correct
                 }
             }
             return img;

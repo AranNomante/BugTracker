@@ -14,7 +14,8 @@ namespace BugTracker.Models
     
     public partial class Image
     {
-        public string title { get; set; }
+        public int id { get; set; }
+        public int id_bug { get; set; }
         public string Name { get; set; }
         public string ContentType { get; set; }
         public byte[] Data { get; set; }

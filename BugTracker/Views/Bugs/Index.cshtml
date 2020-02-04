@@ -153,13 +153,13 @@
                             {
                                 if (ViewBag.msg.Equals("admin") || (item.assignee != null && item.assignee.Equals(ViewBag.clrassignee)))
                                 {
-                                    <div class="col"> @Html.ActionLink("Edit", "Edit", new { id = item.title, prevPage = Request.Url.ToString() }, new {@class="btn btn-outline-primary" }) </div>
+                                    <div class="col"> @Html.ActionLink("Edit", "Edit", new { id = item.id, prevPage = Request.Url.ToString() }, new {@class="btn btn-outline-primary" }) </div>
                                 }
                             }
-                            <div class="col"> @Html.ActionLink("Details", "Details", new { id = item.title, prevPage = Request.Url.ToString() }, new {@class="btn btn-outline-primary" }) </div>
+                            <div class="col"> @Html.ActionLink("Details", "Details", new { id = item.id, prevPage = Request.Url.ToString() }, new {@class="btn btn-outline-primary" }) </div>
                             @if (ViewBag.msg.Equals("admin"))
                             {
-                                <div class="col">@Html.ActionLink("Delete", "Delete", new { id = item.title, prevPage = Request.Url.ToString() }, new {@class="btn btn-outline-primary" }) </div>
+                                <div class="col">@Html.ActionLink("Delete", "Delete", new { id = item.id, prevPage = Request.Url.ToString() }, new {@class="btn btn-outline-primary" }) </div>
                             }
 
                         </div>

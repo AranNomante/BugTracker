@@ -82,7 +82,7 @@
         @using (Html.BeginForm("Delete", "Bugs", FormMethod.Post))
         {
             <input type="hidden" name="prevPage" value="@ViewBag.urlPrev" />
-            <input type="hidden" name="id" value="@Model.title" />
+            <input type="hidden" name="id" value="@Model.id" />
             <div class="form-actions no-color">
                 <input type="submit" value="Delete" class="btn btn-default" /> |
                 <a href="@ViewBag.urlPrev">Previous Page</a>

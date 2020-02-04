@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="BugTrackerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="BugTrackerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Admin">
           <Key>
             <PropertyRef Name="email" />
@@ -21,8 +21,9 @@
         </EntityType>
         <EntityType Name="Bug">
           <Key>
-            <PropertyRef Name="title" />
+            <PropertyRef Name="id" />
           </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="title" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="submitter" Type="nvarchar" MaxLength="254" Nullable="false" />
           <Property Name="assignee" Type="nvarchar" MaxLength="254" />
@@ -36,9 +37,10 @@
         </EntityType>
         <EntityType Name="Image">
           <Key>
-            <PropertyRef Name="title" />
+            <PropertyRef Name="id" />
           </Key>
-          <Property Name="title" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_bug" Type="int" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="ContentType" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="Data" Type="varbinary(max)" Nullable="false" />
@@ -80,13 +82,13 @@
           <End Role="Bug" Type="Self.Bug" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="Image" Type="Self.Image" Multiplicity="0..1" />
+          <End Role="Image" Type="Self.Image" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Bug">
-              <PropertyRef Name="title" />
+              <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="Image">
-              <PropertyRef Name="title" />
+              <PropertyRef Name="id_bug" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -109,7 +111,8 @@
             <End Role="Image" EntitySet="Image" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="BugTrackerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -130,8 +133,9 @@
         </EntityType>
         <EntityType Name="Bug">
           <Key>
-            <PropertyRef Name="title" />
+            <PropertyRef Name="id" />
           </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="title" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="submitter" Type="String" MaxLength="254" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="assignee" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
@@ -148,9 +152,10 @@
         </EntityType>
         <EntityType Name="Image">
           <Key>
-            <PropertyRef Name="title" />
+            <PropertyRef Name="id" />
           </Key>
-          <Property Name="title" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_bug" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="ContentType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Data" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
@@ -177,7 +182,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Bug_User">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Bug" Type="Self.Bug" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
@@ -192,13 +199,13 @@
           <End Role="Bug" Type="Self.Bug" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="Image" Type="Self.Image" Multiplicity="0..1" />
+          <End Role="Image" Type="Self.Image" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Bug">
-              <PropertyRef Name="title" />
+              <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="Image">
-              <PropertyRef Name="title" />
+              <PropertyRef Name="id_bug" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -246,6 +253,7 @@
           <EntitySetMapping Name="Bug">
             <EntityTypeMapping TypeName="BugTrackerModel.Bug">
               <MappingFragment StoreEntitySet="Bug">
+                <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="title" ColumnName="title" />
                 <ScalarProperty Name="submitter" ColumnName="submitter" />
                 <ScalarProperty Name="assignee" ColumnName="assignee" />
@@ -262,7 +270,8 @@
           <EntitySetMapping Name="Image">
             <EntityTypeMapping TypeName="BugTrackerModel.Image">
               <MappingFragment StoreEntitySet="Image">
-                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="id_bug" ColumnName="id_bug" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ContentType" ColumnName="ContentType" />
                 <ScalarProperty Name="Data" ColumnName="Data" />
