@@ -12,7 +12,7 @@
 <div class="row top-buffer">
 
 
-    @using (Html.BeginForm("Edit", "Bugs", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    @using (Html.BeginForm("Edit", "Bugs", FormMethod.Post, new { enctype = "multipart/form-data",name="edit" }))
     {
 
         if (!ViewBag.msg.Equals("no") && !ViewBag.msg.Equals("user"))
@@ -37,7 +37,7 @@
                 </div>
                 <div class="row col-md12">
                     <div class="col col-md-12">
-                        @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control", maxlength = 255 } })
+                        @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control", maxlength = 255,name="title" } })
                         @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -59,7 +59,7 @@
                 </div>
                 <div class="row col-md-12">
                     <div class="col col-md-4">
-                        @Html.EditorFor(model => model.version, new { htmlAttributes = new { @class = "form-control", maxlength = 45 } })
+                        @Html.EditorFor(model => model.version, new { htmlAttributes = new { @class = "form-control", maxlength = 45,name="version" } })
                         @Html.ValidationMessageFor(model => model.version, "", new { @class = "text-danger" })
                     </div>
 
@@ -95,11 +95,11 @@
                 </div>
                 <div class="row col-md-12">
                     <div class="col-md-6">
-                        @Html.TextAreaFor(model => model.fix_description, new { htmlAttributes = new { @class = "form-control", maxlength = 4000, @id = "efd" } })
+                        @Html.TextAreaFor(model => model.fix_description, new { htmlAttributes = new { @class = "form-control", maxlength = 4000 } })
                         @Html.ValidationMessageFor(model => model.version, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-md-6">
-                        @Html.TextAreaFor(model => model.description, new { htmlAttributes = new { @class = "form-control", maxlength = 4000 } })
+                        @Html.TextAreaFor(model => model.description, new { htmlAttributes = new { @class = "form-control", maxlength = 4000 ,name="description"} })
                         @Html.ValidationMessageFor(model => model.version, "", new { @class = "text-danger" })
                     </div>
                 </div>
