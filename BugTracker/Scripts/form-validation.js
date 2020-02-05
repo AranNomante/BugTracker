@@ -261,24 +261,24 @@ $(function () {
             // The key name on the left side is the name attribute
             // of an input field. Validation rules are defined
             // on the right side
-            email: {
+            Email: {
                 required: true,
                 email: true,
                 maxlength: 254
             },
-            password: {
+            Password: {
                 required: true,
                 maxlength: 10
             }
         },
         // Specify validation error messages
         messages: {
-            email: {
+            Email: {
                 required: "Please enter an email",
                 email: "Please enter a valid email",
                 maxlength: "Email too long"
             },
-            password: {
+            Password: {
                 required: "Please enter a password",
                 maxlength: "Password too long"
             }
