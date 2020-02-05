@@ -5,87 +5,102 @@
 @if (ViewBag.msg.Equals("assignee"))
 {
 
-    <h2>Statistics</h2>
-    <table border="1">
-        <tr>
-            <td>
-                Total Number of Bugs Assigned To You
-            </td>
-            <td>
-                @ViewBag.total
-            </td>
-        </tr>
-        <tr>
-            <td>
-                Total Bugs Awaiting Your Fix
-            </td>
-            <td>
-                @ViewBag.open
-            </td>
-        </tr>
-        <tr>
-            <td>
-                Total Bugs Fixed By You
-            </td>
-            <td>
-                @ViewBag.closed
-            </td>
-        </tr>
-    </table>
-    <h3>
-    </h3>
-    <table border="1">
-        <tr>
-            <th>
-                Title
-            </th>
-            <th>
-                Severity
-            </th>
-            <th>
-                State
-            </th>
-            <th>
-                Version
-            </th>
-            <th>
-                Submit Time
-            </th>
-            <th>
-                Fix Time
-            </th>
-        </tr>
+    <div class="row top-buffer col-md-12">
+        <div class="col col-md-12">
+            <h3 class="display-4">Assignee Panel</h3>
+        </div>
+    </div>
+    <div class="row top-buffer col-md-12">
+        <div class="col col-md-12">
+            <table class="table table-striped text-center table-bordered">
+                <tr>
+                    <th class="text-secondary">
+                        Count of Bugs Assigned To You
+                    </th>
+                    <th class="text-secondary">
+                        Count of Bugs Awaiting Your Fix
+                    </th>
+                    <th class="text-secondary">
+                        Count of Bugs Fixed By You
+                    </th>
 
-        @foreach (var item in Model)
-        {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.severity)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.state)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.version)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.submit_time)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.fix_time)
-        </td>
-        <td>
-            <ul>
-                <li> @Html.ActionLink("Edit", "Edit", "Bugs", new { id = item.title, prevPage = Request.Url.ToString() }, null) </li>
-                <li> @Html.ActionLink("Details", "Details", "Bugs", new { id = item.title, prevPage = Request.Url.ToString() }, null) </li>
-            </ul>
-        </td>
-    </tr>
-        }
-    </table>
+                </tr>
+                <tr>
+                    <td>
+                        @ViewBag.total
+                    </td>
+                    <td>
+                        @ViewBag.open
+                    </td>
+                    <td>
+                        @ViewBag.closed
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="row top-buffer col-md-12">
+        <div class="col col-md-12">
+            <table class="table table-striped text-center table-bordered">
+                <tr>
+                    <th class="text-secondary">
+                        Title
+                    </th>
+                    <th class="text-secondary">
+                        Severity
+                    </th>
+                    <th class="text-secondary">
+                        State
+                    </th>
+                    <th class="text-secondary">
+                        Version
+                    </th>
+                    <th class="text-secondary">
+                        Submit Time
+                    </th>
+                    <th class="text-secondary">
+                        Fix Time
+                    </th>
+                    <th class="text-secondary">
+                        Operations
+                    </th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.severity)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.state)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.version)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.submit_time)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.fix_time)
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group">
+
+                                @Html.ActionLink("Edit", "Edit", "Bugs", new { id = item.id, prevPage = Request.Url.ToString() }, new { @class = "btn btn-outline-primary" })
+
+                                @Html.ActionLink("Details", "Details", "Bugs", new { id = item.id, prevPage = Request.Url.ToString() }, new { @class = "btn btn-outline-primary" })
+                            </div>
+
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
     if (Model.HasPreviousPage)
     {
         @Html.ActionLink("Previous", "Stats", "Assignees", new { pageNumber = (Model.PageIndex - 1) }, null)

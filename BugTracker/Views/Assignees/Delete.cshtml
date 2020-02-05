@@ -4,31 +4,43 @@
     ViewBag.Title = "Delete";
 }
 
-<h2>Delete</h2>
 @if (ViewBag.msg.Equals("admin"))
 {
-    <h3>Are you sure you want to delete this?</h3>
-    <div>
-        <h4>Admin</h4>
-        <hr />
-        <dl class="dl-horizontal">
-            <dt>
-                @Html.DisplayNameFor(model => model.email)
-            </dt>
-
-            <dd>
+    <div class="row col-md-12 top-buffer">
+        <div class="col col-md-12">
+            <h3 class="display-4">Delete Assignee</h3>
+        </div>
+    </div> <div class="row col-md-12 top-buffer">
+        <div class="col col-md-12">
+            <h1 class="text-secondary">Are you sure you want to delete this?</h1>
+        </div>
+    </div>
+    <div class="row top-buffer col-md-12">
+        <div class="col col-md-2">
+            <h1 class="text-secondary">
+                Email:
+            </h1>
+        </div>
+        <div class="col col-md-6">
+            <h1>
                 @Html.DisplayFor(model => model.email)
-            </dd>
+            </h1>
+        </div>
+    </div>
+    <div>
 
-        </dl>
 
         @using (Html.BeginForm())
         {
             <input type="hidden" name="prevPage" value="@ViewBag.urlPrev" />
 
-            <div class="form-actions no-color">
-                <input type="submit" value="Delete" class="btn btn-default" /> |
-                <a href="@ViewBag.urlPrev">Previous Page</a>
+            <div class="row top-buffer">
+                <div class="col-sm">
+                    <a class="btn btn-outline-primary" href="@ViewBag.urlPrev">Previous Page</a>
+                </div>
+                <div class="col-sm">
+                    <input type="submit" value="Delete" class="btn btn-outline-primary" />
+                </div>
             </div>
         }
     </div>

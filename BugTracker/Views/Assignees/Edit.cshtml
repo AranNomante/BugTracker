@@ -7,36 +7,55 @@
 @if ((ViewBag.msg.Equals("admin") && ViewBag.adm.Equals("m")) || (ViewBag.msg.Equals("assignee") && ViewBag.clrassignee.Equals(Model.email)) ||
     (ViewBag.msg.Equals("admin") && Model.email.Equals(ViewBag.adm)))
 {
-
-    <h2>Edit</h2>
-    using (Html.BeginForm("Edit","Assignees",FormMethod.Post,new { name="asedit"}))
+    <div class="row col-md-12 top-buffer">
+        <div class="col col-md-12">
+            <h3 class="display-4">Edit Assignee</h3>
+        </div>
+    </div>
+    <div class="row col-md-12 top-buffer">
+        <div class="col col-md-12">
+            <h1 class="text-secondary">Editing:"@Model.email"</h1>
+        </div>
+    </div>
+    using (Html.BeginForm("Edit", "Assignees", FormMethod.Post, new { name = "asedit" }))
     {
+        <div class="row col-md-12 top-buffer">
+            <input type="hidden" name="prevPage" value="@ViewBag.urlPrev" />
+            <div class="form-horizontal">
 
-        <input type="hidden" name="prevPage" value="@ViewBag.urlPrev" />
-        <div class="form-horizontal">
-            <h4>Admin</h4>
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @Html.HiddenFor(model => model.email)
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.email)
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.password, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "form-control", name="password" } })
-                    @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    <div class="row col-md-12">
+                        <div class="col col-md-12">
+                            <p class="text-secondary">Password</p>
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "form-control", name = "password" } })
+                        @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
+                    </div>
                 </div>
-            </div>
 
+            </div>
+        </div>
+        <div class="row col-md-12">
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Save" class="btn btn-default" />
+
+                    <input type="submit" value="Save" class="btn btn-outline-primary" />
                 </div>
+                <div class="form-group top-buffer">
+                    <div class="col-md-offset-2 col-md-10">
+                        <a href="@ViewBag.urlPrev" class="btn btn-outline-primary">Previous Page</a>
+                    </div>
+                </div>
+
             </div>
+
         </div>
     }
 
-    <div>
-        <a href="@ViewBag.urlPrev">Previous Page</a>
-    </div>
 
 }

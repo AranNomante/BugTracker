@@ -4,90 +4,115 @@
 }
 @if (ViewBag.msg.Equals("user"))
 {
+    <div class="row top-buffer col-md-12">
+        <div class="col col-md-12">
+            <h3 class="display-4">User Panel</h3>
+        </div>
+    </div>
+    <div class="row top-buffer col-md-12">
+        <div class="col col-md-12">
+            <table class="table table-striped text-center table-bordered">
+                <tr>
+                    <th class="text-secondary">
+                        Count of Bugs Posted By You
+                    </th>
+                    <th class="text-secondary">
+                        Count of Bugs Awaiting Fix
+                    </th>
+                    <th class="text-secondary">
+                        Count of Fixed Bugs That You Posted
+                    </th>
 
+                </tr>
+                <tr>
+                    <td>
+                        @ViewBag.total
+                    </td>
+                    <td>
+                        @ViewBag.open
+                    </td>
+                    <td>
+                        @ViewBag.closed
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="row top-buffer col-md-12">
+        <div class="col col-md-12">
+            <table class="table table-striped text-center table-bordered">
+                <tr>
+                    <th class="text-secondary">
+                        Title
+                    </th>
+                    <th class="text-secondary">
+                        Severity
+                    </th>
+                    <th class="text-secondary">
+                        State
+                    </th>
+                    <th class="text-secondary">
+                        Version
+                    </th>
+                    <th class="text-secondary">
+                        Submit Time
+                    </th>
+                    <th class="text-secondary">
+                        Operations
+                    </th>
+                </tr>
 
-    <table border="1">
-        <tr>
-            <td>
-                Total Number of Bugs Posted By You
-            </td>
-            <td>
-                @ViewBag.total
-            </td>
-        </tr>
-        <tr>
-            <td>
-                Total Bugs Awaiting Fix
-            </td>
-            <td>
-                @ViewBag.open
-            </td>
-        </tr>
-        <tr>
-            <td>
-                Total Fixed Bugs That You Posted
-            </td>
-            <td>
-                @ViewBag.closed
-            </td>
-        </tr>
-    </table>
-    <h3>
-    </h3>
-    <table border="1">
-        <tr>
-            <th>
-                Title
-            </th>
-            <th>
-                Severity
-            </th>
-            <th>
-                State
-            </th>
-            <th>
-                Version
-            </th>
-            <th>
-                Submit Time
-            </th>
-        </tr>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.severity)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.state)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.version)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.submit_time)
+                        </td>
+                        <td>
+                            <div class="row text-center">
+                                <div class="col-sm"> @Html.ActionLink("Details", "Details", "Bugs", new { id = item.id, prevPage = Request.Url.ToString() }, new { @class = "btn btn-outline-primary" }) </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+    <div class="row text-center top-buffer col-md-12">
+        <div class="col col-md-6">
+            @if (Model.HasPreviousPage)
+            {
+                @Html.ActionLink("Previous", "Stats", "Users", new { pageNumber = (Model.PageIndex - 1) }, new { @class = "btn btn-outline-primary" })
 
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.severity)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.state)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.version)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.submit_time)
-                </td>
-                <td>
-                    <ul>
-                        <li> @Html.ActionLink("Details", "Details", "Bugs", new { id = item.title, prevPage = Request.Url.ToString() }, null) </li>
-                    </ul>
-                </td>
-            </tr>
-        }
-    </table>
-    if (Model.HasPreviousPage)
-    {
-        @Html.ActionLink("Previous", "Stats", "Users", new { pageNumber = (Model.PageIndex - 1) }, null)
-
-    }
-    if (Model.HasNextPage)
-    {
-        @Html.ActionLink("Next", "Stats", "Users", new { pageNumber = (Model.PageIndex + 1) }, null)
-    }
+            }
+            else
+            {
+                <input type="button" value="Previous" class="btn btn-warning" />
+            }
+        </div>
+        <div class="col col-md-6">
+            @if (Model.HasNextPage)
+            {
+                @Html.ActionLink("Next", "Stats", "Users", new { pageNumber = (Model.PageIndex + 1) }, new { @class = "btn btn-outline-primary" })
+            }
+            else
+            {
+                <input type="button" value="Next" class="btn btn-warning" />
+            }
+        </div>
+    </div>
 
 
 }
