@@ -42,11 +42,10 @@
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 @if (ViewBag.msg.Equals("admin"))
                                 {
-                                    if (ViewBag.adm.Equals("m"))
-                                    {
-                                        @Html.ActionLink("Admins", "Index", "Admins", null, new { @class = "dropdown-item" })
-                                        <div class="dropdown-divider"></div>
-                                    }
+
+                                    @Html.ActionLink("Admins", "Index", "Admins", null, new { @class = "dropdown-item" })
+                                    <div class="dropdown-divider"></div>
+
                                     @Html.ActionLink("Assignees", "Index", "Assignees", null, new { @class = "dropdown-item" })
                                     @Html.ActionLink("Users", "Index", "Users", null, new { @class = "dropdown-item" })
                                 }
