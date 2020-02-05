@@ -5,16 +5,14 @@
 
 <div class="row col-md-12 top-buffer">
     <div class="col col-md-12">
-        <h3 class="display-4">Edit</h3>
+        <h3 class="display-4">Edit Bug</h3>
     </div>
 </div>
 <div class="row col-md-12 top-buffer">
     <div class="col col-md-12">
-        <h1 class="text-secondary">Editing "@Model.title"</h1>
+        <h1 class="text-secondary">Editing:"@Model.title"</h1>
     </div>
 </div>
-<div class="row top-buffer">
-
 
     @using (Html.BeginForm("Edit", "Bugs", FormMethod.Post, new { enctype = "multipart/form-data", name = "edit" }))
     {
@@ -150,4 +148,3 @@
             }
         }
     }
-</div>

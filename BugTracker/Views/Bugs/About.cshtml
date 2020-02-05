@@ -3,86 +3,105 @@
     ViewBag.Title = "About";
 }
 <!--About a eklemeler yapılabilir admin için ekstra vs-->
-<div class="row top-buffer">
-    <h3 class="display-4">Statistics</h3>
+<div class="row top-buffer col-md-12">
+    <div class="col col-md-12">
+        <h3 class="display-4">Statistics</h3>
+    </div>
 </div>
-<div class="row top-buffer">
-    <table class="table table-striped text-center table-bordered">
-        <tr>
-            <th>
-                <p class="text-secondary">Total Bug Count</p>
-</th>
-            <th>
-                <p class="text-secondary">Open Bug Count</p>
-</th>
-            <th>
-                <p class="text-secondary">
-                    Closed Bug Count</p>
-            </th>
-            <th>
-                <p class="text-secondary">
-                    User Count</p>
-            </th>
-            <th><p class="text-secondary">
-    Assignee Count</p>
-</th>
-        </tr>
-        <tr>
-            <td>
-                @ViewBag.total
-            </td>
-            <td>
-                @ViewBag.open
-            </td>
-            <td>
-                @ViewBag.closed
-            </td>
-            <td>
-                @ViewBag.users
-            </td>
-            <td>
-                @ViewBag.assignees
-            </td>
-        </tr>
-    </table>
-    <h3>
-    </h3>
-    <table class="table table-striped text-center table-bordered">
-        <tr>
-            <th>
-                <p class="text-secondary">  Filing Date</p>
-</th>
-            <th>
-                <p class="text-secondary">
-                    Bugs</p>
-            </th>
-        </tr>
-
-        @foreach (var item in Model)
-        {
+<div class="row top-buffer col-md-12">
+    <div class="col col-md-12">
+        <table class="table table-striped text-center table-bordered">
+            <tr>
+                <th>
+                    <p class="text-secondary">Total Bug Count</p>
+                </th>
+                <th>
+                    <p class="text-secondary">Open Bug Count</p>
+                </th>
+                <th>
+                    <p class="text-secondary">
+                        Closed Bug Count
+                    </p>
+                </th>
+                <th>
+                    <p class="text-secondary">
+                        User Count
+                    </p>
+                </th>
+                <th>
+                    <p class="text-secondary">
+                        Assignee Count
+                    </p>
+                </th>
+            </tr>
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.FileDate)
+                    @ViewBag.total
                 </td>
                 <td>
-                    @item.FileCount
+                    @ViewBag.open
+                </td>
+                <td>
+                    @ViewBag.closed
+                </td>
+                <td>
+                    @ViewBag.users
+                </td>
+                <td>
+                    @ViewBag.assignees
                 </td>
             </tr>
-        }
-    </table>
+        </table>
+    </div>
+</div> 
+<div class="row col-md-12 top-buffer">
+    <div class="col col-md-12">
+        <table class="table table-striped text-center table-bordered">
+            <tr>
+                <th>
+                    <p class="text-secondary">  Filing Date</p>
+                </th>
+                <th>
+                    <p class="text-secondary">
+                        Bugs
+                    </p>
+                </th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FileDate)
+                    </td>
+                    <td>
+                        @item.FileCount
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
 </div>
-<div class="row text-center top-buffer">
-    <div class="col">
+<div class="row text-center top-buffer col-md-12">
+    <div class="col col-md-6">
         @if (Model.HasPreviousPage)
         {
             @Html.ActionLink("Previous", "About", "Bugs", new { pageNumber = (Model.PageIndex - 1) }, new { @class = "btn btn-outline-primary" })
 
         }
+        else
+        {
+            <input type="button" value="Previous" class="btn btn-warning" />
+        }
     </div>
-    <div class="col">
+    <div class="col col-md-6">
         @if (Model.HasNextPage)
         {
             @Html.ActionLink("Next", "About", "Bugs", new { pageNumber = (Model.PageIndex + 1) }, new { @class = "btn btn-outline-primary" })
+        }
+        else
+        {
+            <input type="button" value="Next" class="btn btn-warning" />
         }
     </div>
 </div>

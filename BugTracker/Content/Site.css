@@ -4,8 +4,13 @@ to use a different color start by replacing all instances of
 #5c87b2 with your new color.
 ----------------------------------------------------------*/
 body {
-    background: rgb(151,187,145);
-    background: linear-gradient(90deg, rgba(151,187,145,0.4718838218881303) 33%, rgba(207,212,184,0.037710152420343146) 100%);
+    background-image: url("Images/bg.jpg");
+    background-color: #cccccc;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
     font-size: medium;
     font-family: Tahoma, Arial, Helvetica;
     margin: 20px 25px 0px 25px;
@@ -13,6 +18,14 @@ body {
     color: #595959;
 }
 #search {
+    background: url(Images/search.png);
+    border: 0;
+    display: block;
+    height: 33px;
+    width: 38px;
+    border-radius: 90%;
+}
+#asearch {
     background: url(Images/search.png);
     border: 0;
     display: block;
@@ -353,4 +366,8 @@ input.button
 }
 .top-buffer{
     margin-top:20px;
+}
+.top-mini{
+    margin-top:5px;
+    margin-bottom:5px;
 }

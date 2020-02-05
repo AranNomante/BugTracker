@@ -8,97 +8,125 @@
 
 
     <!--Index değişmeyecek-->
-    <h2>Index</h2>
-    <h1>@ViewBag.msg</h1>
-    <h1>@ViewBag.adm</h1>
+    <div class="row top-buffer col-md-12">
+        <div class="col col-md-12">
+            <h3 class="display-4">Admins</h3>
+        </div>
+    </div>
     if (ViewData["order"] == null) { ViewData["order"] = ViewData["order"] = "desc"; }
-    <h2>
-        SortOrder: @ViewData["order"], Search: @ViewData["searchString"],
-        CurrentF: @ViewData["CurrentFilter"]
-    </h2>
-    <p>
-        @if (ViewBag.adm.Equals("m"))
-        {
-            @Html.ActionLink("Create New", "Create", new { prevPage = Request.Url.ToString() })
-        }
-    </p>
+    <div class="row top-buffer col-md-12">
+        <div class="col col-md-12">
+            <h3 class="text-secondary"><b>Filter: Email in @ViewData["order"] order.</b></h3>
+        </div>
+    </div>
+
     <!--Search Bar-->
     using (Html.BeginForm("Index", "Admins"))
     {
+        <div class="row top-buffer col-md-12">
+            <input type="hidden" name="sortOrder" value="@(ViewData["order"].Equals("asc") ? "desc" : "asc")" />
+            <div class="col col-md-12">
+                <div class="form-inline">
+                    <div class="form-row">
+                        <div class="col">
+                            <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" placeholder="Search..." class="form-control" />
 
-        <input type="hidden" name="sortOrder" value="@(ViewData["order"].Equals("asc") ? "desc" : "asc")" />
-        <table>
-            <tr>
-                <td colspan="4">
-                    <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" placeholder="Search..." />
-                </td>
-                <td>
-                    <input type="submit" value="Go" />
-                </td>
-            </tr>
+                        </div><div class="col">
+                            <input type="submit" value="" id="asearch" />
+                        </div>
+                        <div class="col">
+                            @if (ViewBag.adm.Equals("m"))
+                            {
+                                @Html.ActionLink("Create New", "Create", new { prevPage = Request.Url.ToString() }, new { @class = "btn btn-outline-primary" })
+                            }
+                        </div>
 
-        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     }
-
-    <table class="table" border="1" cellspacing="1">
-        <tr>
-            <th>
-                @Html.ActionLink("Email", "Index", "Admins", new { sortOrder = ViewData["order"], currentFilter = ViewData["CurrentFilter"] }, null)
-
-            </th>
-            <th>
-                Password
-            </th>
-        </tr>
-        @if (Model != null)
-        {
-            foreach (var item in Model)
-            {
+    <div class="row top-buffer col-md-12">
+        <div class="col col-md-12">
+            <table class="table table-striped text-center table-bordered">
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.email)
-                    </td>
-                    <td>
-                        @if (ViewBag.adm.Equals("m") || item.email.Equals(ViewBag.adm))
-                        {
-                            @Html.DisplayFor(modelItem => item.password)
-                        }
-                        else
-                        {
-                            <input type="password" readonly value="@item.password" />
-                        }
-                    </td>
-                    <td>
-                        <ul>
+                    <th>
+                        @Html.ActionLink("Email", "Index", "Admins", new { sortOrder = ViewData["order"], currentFilter = ViewData["CurrentFilter"] }, new { @class = "text-primary" })
 
-                            <!--adm=m master admin else normal-->
-                            @if (ViewBag.adm.Equals("m") || item.email.Equals(ViewBag.adm))
-                            {
-                                <li> @Html.ActionLink("Edit", "Edit", new { id = item.email.Split('.')[0], prevPage = Request.Url.ToString() }) </li>
-                            }
-
-                            @if (ViewBag.adm.Equals("m") && !item.email.Split('@')[0].Equals("master"))
-                            {
-                                <li> @Html.ActionLink("Delete", "Delete", new { id = item.email.Split('.')[0], prevPage = Request.Url.ToString() }) </li>
-                            }
-
-                        </ul>
-                    </td>
+                    </th>
+                    <th>
+                        <p class="text-secondary">Password</p>
+                    </th>
+                    <th>
+                        <p class="text-secondary">Operations</p>
+                    </th>
                 </tr>
+                @if (Model != null)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.email)
+                            </td>
+                            <td>
+                                @if (ViewBag.adm.Equals("m") || item.email.Equals(ViewBag.adm))
+                                {
+                                    @Html.DisplayFor(modelItem => item.password)
+                                }
+                                else
+                                {
+                                    <input type="password" readonly value="@item.password" />
+                                }
+                            </td>
+                            <td>
+                                <div class="row text-center">
+                                    <div class="col-sm">
+                                        <!--adm=m master admin else normal-->
+                                        @if (ViewBag.adm.Equals("m") || item.email.Equals(ViewBag.adm))
+                                        {
+                                            @Html.ActionLink("Edit", "Edit", new { id = item.email.Split('.')[0], prevPage = Request.Url.ToString() }, new { @class = "btn btn-outline-primary" })
+                                        }
+                                    </div><div class="col-sm">
+                                        @if (ViewBag.adm.Equals("m") && !item.email.Split('@')[0].Equals("master"))
+                                        {
+
+                                            @Html.ActionLink("Delete", "Delete", new { id = item.email.Split('.')[0], prevPage = Request.Url.ToString() }, new { @class = "btn btn-outline-primary" })
+
+                                        }
+                                    </div>
+                                </div>
+
+                            </td>
+                        </tr>
+                    }
+                }
+
+            </table>
+        </div>
+    </div>
+    <div class="row text-center top-buffer col-md-12">
+        <div class="col col-md-6">
+            @if (Model != null && Model.HasPreviousPage)
+            {
+                @Html.ActionLink("Previous", "Index", "Admins", new { sortOrder = (ViewData["order"].Equals("asc") ? "desc" : "asc"), currentFilter = ViewData["CurrentFilter"], pageNumber = (Model.PageIndex - 1) }, new { @class = "btn btn-outline-primary" })
+
             }
-        }
+            else
+            {
+                <input type="button" value="Previous" class="btn btn-warning" />
+            }
+        </div>
+        <div class="col col-md-6">
+            @if (Model != null && Model.HasNextPage)
+            {
+                @Html.ActionLink("Next", "Index", "Admins", new { sortOrder = (ViewData["order"].Equals("asc") ? "desc" : "asc"), currentFilter = ViewData["CurrentFilter"], pageNumber = (Model.PageIndex + 1) }, new { @class = "btn btn-outline-primary" })
+            }
+            else
+            {
+                <input type="button" value="Next" class="btn btn-warning" />
+            }
 
-    </table>
-
-
-    if (Model != null && Model.HasPreviousPage)
-    {
-        @Html.ActionLink("Previous", "Index", "Admins", new { sortOrder = (ViewData["order"].Equals("asc") ? "desc" : "asc"), currentFilter = ViewData["CurrentFilter"], pageNumber = (Model.PageIndex - 1) }, null)
-
-    }
-    if (Model != null && Model.HasNextPage)
-    {
-        @Html.ActionLink("Next", "Index", "Admins", new { sortOrder = (ViewData["order"].Equals("asc") ? "desc" : "asc"), currentFilter = ViewData["CurrentFilter"], pageNumber = (Model.PageIndex + 1) }, null)
-    }
-
+        </div>
+    </div>
 }
