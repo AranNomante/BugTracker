@@ -17,6 +17,27 @@ body {
     padding: 0;
     color: #595959;
 }
+/*  LOADING SPINNER  */
+.loadingDiv-parent {
+    position: fixed;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    z-index: 999998;
+}
+
+.loadingDiv {
+    position: fixed;
+    text-align: center;
+    top: 40%;
+    left: 45%;
+    z-index: 999999;
+}
+
+    .loadingDiv .loading-image {
+        display: block;
+        margin: 25px 75px;
+    }
 #search {
     background: url(Images/search.png);
     border: 0;
