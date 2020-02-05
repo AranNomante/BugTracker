@@ -16,6 +16,17 @@
     <script src="https://kit.fontawesome.com/e203b9c37b.js" crossorigin="anonymous"></script>
 </head>
 <body>
+    @{var tdata = TempData["ErStat"]; }
+    @if ( tdata!=null)
+    {
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>Holy guacamole!</strong> @tdata
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        TempData.Remove("ErStat");
+    }
     <div class="container">
 
         <nav class="navbar navbar-expand-lg navbar-light bg-primary">
@@ -84,11 +95,11 @@
     <div class="container top-buffer">
         <footer>Altug Ceylan 2020</footer>
     </div>
-        <div class="loadingDiv-parent">
+    <div class="loadingDiv-parent">
         <div class="loadingDiv">
             <div class="card border-success ">
                 <div class="card-body bg-primary">
-                    <i class="fas fa-spinner"style="font-size:5em;" aria-hidden="true" ></i>
+                    <i class="fas fa-spinner" style="font-size:5em;" aria-hidden="true"></i>
                 </div>
             </div>
         </div>

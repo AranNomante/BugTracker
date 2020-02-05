@@ -32,7 +32,7 @@ namespace BugTracker.Controllers
             }
             return View();
         }
-        public void Logout()
+        public ActionResult Logout()
         {
             var u = new HttpCookie("user");
             var c = new HttpCookie("clearance");
@@ -40,10 +40,10 @@ namespace BugTracker.Controllers
             c.Expires = DateTime.Now.AddDays(-1);
             Response.Cookies.Add(u);
             Response.Cookies.Add(c);
-            Response.Redirect("/Home");
+            return RedirectToAction("Index");
         }
         [HttpPost]
-        public void Verify(Credentials crd)
+        public ActionResult Verify(Credentials crd)
         {
 
             var flag = GetUser(crd);
@@ -76,11 +76,11 @@ namespace BugTracker.Controllers
                 };
                 Response.Cookies.Add(usr);
                 Response.Cookies.Add(clr);
-                Response.Redirect("/Home");
+                return RedirectToAction("Index");
             }
             else
             {
-                Response.Redirect("/Home/Login");
+                return RedirectToAction("NoLogin", "Error");
             }
         }
 

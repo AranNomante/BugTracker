@@ -33,6 +33,11 @@ namespace BugTracker.Controllers
         public async Task<ActionResult> Index(string sortOrder, string currentFilter,
  int? pageNumber, string searchString)
         {
+            string ustp = helper.CheckCk();
+            if (!ustp.Equals("admin"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
             if (searchString != null)
             {
                 pageNumber = 1;
@@ -42,7 +47,7 @@ namespace BugTracker.Controllers
                 searchString = currentFilter;
             }
             ViewData["CurrentFilter"] = searchString;
-            ViewBag.msg = helper.CheckCk();
+            ViewBag.msg = ustp;
             var usr = _db.User.AsQueryable();
             usr = helper.Search(usr, searchString);
             usr = helper.Sort(usr, sortOrder);
@@ -53,7 +58,12 @@ namespace BugTracker.Controllers
 
         public async Task<ActionResult> Stats(int? pageNumber)
         {
-            ViewBag.msg = helper.CheckCk();
+            string ustp = helper.CheckCk();
+            if (!ustp.Equals("user"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            ViewBag.msg = ustp;
             var data = _db.Bug.AsQueryable();
             string usr = helper.Decrypt(helper.DeCode(Request.Cookies["user"].Value), Request.Cookies["clearance"].Value);
             ViewBag.total = data.Where(b => b.submitter.Equals(usr)).Count();
@@ -68,8 +78,13 @@ namespace BugTracker.Controllers
         // GET: Users/Create
         public ActionResult Create(string prevPage)
         {
+            string ustp = helper.CheckCk();
+            if (!ustp.Equals("admin"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
             ViewBag.urlPrev = prevPage;
-            ViewBag.msg = helper.CheckCk();
+            ViewBag.msg = ustp;
             return View();
         }
 
@@ -79,8 +94,13 @@ namespace BugTracker.Controllers
         [HttpPost]
         public async Task<ActionResult> Create([Bind(Include = "email,password")] User user, string prevPage)
         {
+            string ustp = helper.CheckCk();
+            if (!ustp.Equals("admin"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
             ViewBag.urlPrev = prevPage;
-            ViewBag.msg = helper.CheckCk();
+            ViewBag.msg = ustp;
             if (ModelState.IsValid)
             {
                 _db.User.Add(user);
@@ -94,17 +114,22 @@ namespace BugTracker.Controllers
         // GET: Users/Edit/5
         public async Task<ActionResult> Edit(string id, string prevPage)
         {
+            string ustp = helper.CheckCk();
+            if (!ustp.Equals("admin"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
             ViewBag.urlPrev = prevPage;
-            ViewBag.msg = helper.CheckCk();
+            ViewBag.msg = ustp;
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("BadReq", "Error");
             }
             id = String.Format("{0}.com", id);
             User user = await _db.User.FindAsync(id);
             if (user == null)
             {
-                return HttpNotFound();
+                return RedirectToAction("NotFound", "Error");
             }
             return View(user);
         }
@@ -115,8 +140,13 @@ namespace BugTracker.Controllers
         [HttpPost]
         public async Task<ActionResult> Edit([Bind(Include = "email,password")] User user, string prevPage)
         {
+            string ustp = helper.CheckCk();
+            if (!ustp.Equals("admin"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
             ViewBag.urlPrev = prevPage;
-            ViewBag.msg = helper.CheckCk();
+            ViewBag.msg = ustp;
             if (ModelState.IsValid)
             {
                 _db.Entry(user).State = EntityState.Modified;
@@ -129,17 +159,22 @@ namespace BugTracker.Controllers
         // GET: Users/Delete/5
         public async Task<ActionResult> Delete(string id, string prevPage)
         {
+            string ustp = helper.CheckCk();
+            if (!ustp.Equals("admin"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
             ViewBag.urlPrev = prevPage;
-            ViewBag.msg = helper.CheckCk();
+            ViewBag.msg = ustp;
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("BadReq", "Error");
             }
             id = String.Format("{0}.com", id);
             User user = await _db.User.FindAsync(id);
             if (user == null)
             {
-                return HttpNotFound();
+                return RedirectToAction("BadReq", "Error");
             }
             return View(user);
         }
@@ -148,9 +183,14 @@ namespace BugTracker.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<ActionResult> DeleteConfirmed(string id, string prevPage)
         {
+            string ustp = helper.CheckCk();
+            if (!ustp.Equals("admin"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
             id = String.Format("{0}.com", id);
             ViewBag.urlPrev = prevPage;
-            ViewBag.msg = helper.CheckCk();
+            ViewBag.msg = ustp;
             User user = await _db.User.FindAsync(id);
             _db.User.Remove(user);
             int saved = await _db.SaveChangesAsync();

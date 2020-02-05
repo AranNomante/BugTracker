@@ -92,12 +92,12 @@ namespace BugTracker.Controllers
             ViewBag.msg = helper.CheckCk();
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("BadReq", "Error");
             }
             Bug bug = await _db.Bug.FindAsync(id);
             if (bug == null)
             {
-                return HttpNotFound();
+                return RedirectToAction("NotFound", "Error");
             }
             Image[] imgs = (from im in _db.Image where im.id_bug == bug.id select im).DefaultIfEmpty(null).ToArray();
             String[] imstrs = null;
@@ -121,7 +121,7 @@ namespace BugTracker.Controllers
             string ustp = helper.CheckCk();
             if (!ustp.Equals("user"))
             {
-                Response.Redirect("/Home");
+                return RedirectToAction("Index", "Home");
             }
             ViewBag.urlPrev = prevPage;
             ViewBag.msg = ustp;
@@ -137,7 +137,7 @@ namespace BugTracker.Controllers
             string ustp = helper.CheckCk();
             if (!ustp.Equals("user"))
             {
-                Response.Redirect("/Home");
+                return RedirectToAction("Index", "Home");
             }
             ViewBag.urlPrev = prevPage;
             ViewBag.msg = ustp;
@@ -179,18 +179,18 @@ namespace BugTracker.Controllers
             string ustp = helper.CheckCk();
             if (!ustp.Equals("admin") && !ustp.Equals("assignee"))
             {
-                Response.Redirect("/Home");
+                return RedirectToAction("Index", "Home");
             }
             ViewBag.urlPrev = prevPage;
             ViewBag.msg = ustp;
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("BadReq", "Error");
             }
             Bug bug = await _db.Bug.FindAsync(id);
             if (bug == null)
             {
-                return HttpNotFound();
+                return RedirectToAction("NotFound", "Error");
             }
             List<SelectListItem> emails = new List<SelectListItem>();
             foreach (var item in await _db.Assignee.ToListAsync())
@@ -225,7 +225,7 @@ namespace BugTracker.Controllers
             string ustp = helper.CheckCk();
             if (!ustp.Equals("admin") && !ustp.Equals("assignee"))
             {
-                Response.Redirect("/Home");
+                return RedirectToAction("Index", "Home");
             }
             ViewBag.urlPrev = prevPage;
             ViewBag.msg = ustp;
@@ -284,18 +284,18 @@ namespace BugTracker.Controllers
             string ustp = helper.CheckCk();
             if (!ustp.Equals("admin"))
             {
-                Response.Redirect("/Home");
+                return RedirectToAction("Index", "Home");
             }
             ViewBag.urlPrev = prevPage;
             ViewBag.msg = ustp;
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("BadReq", "Error");
             }
             Bug bug = await _db.Bug.FindAsync(id);
             if (bug == null)
             {
-                return HttpNotFound();
+                return RedirectToAction("NotFound", "Error");
             }
             return View(bug);
         }
@@ -307,7 +307,7 @@ namespace BugTracker.Controllers
             string ustp = helper.CheckCk();
             if (!ustp.Equals("admin"))
             {
-                Response.Redirect("/Home");
+                return RedirectToAction("Index", "Home");
             }
             ViewBag.urlPrev = prevPage;
             ViewBag.msg = ustp;

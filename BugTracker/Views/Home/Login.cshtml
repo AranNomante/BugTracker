@@ -11,16 +11,16 @@
             </div>
         </div>
         <div class="row top-buffer col-md-12">
-            @using (Html.BeginForm("Verify", "Home", FormMethod.Post))
+            @using (Html.BeginForm("Verify", "Home", FormMethod.Post, new { name = "login" }))
             {
                 <div class="col col-md-12">
                     <label class="text-secondary" for="exampleInputEmail1">Email address</label>
-                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @id = "exampleInputEmail1", @placeholder = "email@example.com" })
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @id = "exampleInputEmail1", @placeholder = "email@example.com", @name="email" })
                     <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
                 </div>
                 <div class="col col-md-12 top-buffer">
                     <label class="text-secondary" for="exampleInputPassword1">Password</label>
-                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", @id = "exampleInputPassword1", @placeholder = "Password" })
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", @id = "exampleInputPassword1", @placeholder = "Password" ,  @name="password"})
                 </div>
                 <div class="col col-md-12 top-buffer text-right">
                     <button type="submit" class="btn btn-primary">Submit</button>
