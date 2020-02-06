@@ -125,7 +125,7 @@
                 <a href="@ViewBag.urlPrev" class="btn btn-outline-primary">Previous Page</a>
             </div>
             <div class="col col-md-6">
-                @Html.ActionLink("Edit", "Edit", new { id = Model.title, prevPage = Request.Url.ToString() }, new { @class = "btn btn-outline-primary" })
+                @Html.ActionLink("Edit", "Edit", new { id = Model.id, prevPage = Request.Url.ToString() }, new { @class = "btn btn-outline-primary" })
             </div>
         }
         else

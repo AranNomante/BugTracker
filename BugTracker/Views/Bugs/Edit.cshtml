@@ -116,6 +116,7 @@
 
             if (ViewBag.imgurl != null)
             {
+                int i = 0;
                 foreach (String s in ViewBag.imgurl)
                 {
                     if (s != null)
@@ -125,10 +126,18 @@
                                 <img src="@s" class="img-fluid" alt="Responsive image" />
                             </div>
                         </div>
+                        <div class="row col-md-12 text-center top-mini">
+                            <div class="col col-md-12">
+                                @Html.ActionLink("Delete", "DeleteImg", new { id = ViewBag.imgid[i], prevPage = Request.Url.ToString() }, new { @class = "btn btn-outline-primary" })
+                            </div>
+                        </div>
+                        <hr/>
+                        <hr/>
+                        i++;
                     }
                 }
             }
-            
+
 
             <div class="row col-md-12 top-buffer">
                 <div class="col col-md-12">
