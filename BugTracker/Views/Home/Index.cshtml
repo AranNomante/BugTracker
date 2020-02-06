@@ -1,11 +1,22 @@
-﻿
+﻿@model BugTracker.Models.Manuals
 @{
     ViewBag.Title = "Home Page";
-
+    var txt = String.Format("<pre>{0}</pre>", Model.text);
 }
+<div class="jumbotron top-buffer text-center ">
+    <h1 class="display-4 text-primary">Welcome To Bug Tracker</h1>
+    <p class="lead text-info">Espice, adspice, prospice.</p>
+    <hr class="my-4">
+    <p class="text-secondary">Explore the site</p>
+    <p class="lead">
+        <div class="btn-group" role="group">
+            @Html.ActionLink("View Filed Bugs", "Index", "Bugs", null, new { @class = "btn btn-outline-primary" })
+            @Html.ActionLink("View Statistics", "Index", "Bugs", null, new { @class = "btn btn-outline-primary" })
+        </div>
+    </p>
+</div>
 <div class="row top-buffer col-md-12">
-    <div class="col-lg-1 col-md-12">
-
-        <h3 class="display-4">Index</h3>
+    <div class="col col-md-12 ">
+        @Html.Raw(txt)
     </div>
 </div>

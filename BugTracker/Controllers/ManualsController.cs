@@ -4,8 +4,6 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using BugTracker.Models;
 using BugTracker.Code;
@@ -22,7 +20,7 @@ namespace BugTracker.Controllers
 
 
         // GET: Manuals/Edit/5
-        public async Task<ActionResult> Edit(int? id)
+        public async Task<ActionResult> Edit(int? id, string prevPage)
         {
             string ustp = helper.CheckCk();
             if (!ustp.Equals("admin") )
@@ -30,6 +28,7 @@ namespace BugTracker.Controllers
                 return RedirectToAction("Index", "Home");
             }
             ViewBag.msg = ustp;
+            ViewBag.urlPrev = prevPage;
             if (id == null)
             {
                 return RedirectToAction("BadReq", "Error");
@@ -46,7 +45,7 @@ namespace BugTracker.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public async Task<ActionResult> Edit([Bind(Include = "id,text")] Manuals manuals)
+        public async Task<ActionResult> Edit([Bind(Include = "id,text")] Manuals manuals, string prevPage)
         {
             string ustp = helper.CheckCk();
             if (!ustp.Equals("admin"))
@@ -54,6 +53,7 @@ namespace BugTracker.Controllers
                 return RedirectToAction("Index", "Home");
             }
             ViewBag.msg = ustp;
+            ViewBag.urlPrev = prevPage;
             if (ModelState.IsValid)
             {
                 _db.Entry(manuals).State = EntityState.Modified;

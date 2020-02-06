@@ -17,7 +17,7 @@
 </head>
 <body>
     @{var tdata = TempData["ErStat"]; }
-    @if ( tdata!=null)
+    @if (tdata != null)
     {
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
             <strong>Holy guacamole!</strong> @tdata
@@ -57,10 +57,18 @@
                                 {
 
                                     @Html.ActionLink("Admins", "Index", "Admins", null, new { @class = "dropdown-item" })
-                                    <div class="dropdown-divider"></div>
-
                                     @Html.ActionLink("Assignees", "Index", "Assignees", null, new { @class = "dropdown-item" })
                                     @Html.ActionLink("Users", "Index", "Users", null, new { @class = "dropdown-item" })
+                                    if (ViewBag.adm.Equals("m"))
+                                    {
+                                        <div class="dropdown-divider"></div>
+                                        @Html.ActionLink("Non-User Manual", "Edit", "Manuals", new { prevPage = Request.Url.ToString(), id = 1 }, new { @class = "dropdown-item" })
+                                        @Html.ActionLink("User Manual", "Edit", "Manuals", new { prevPage = Request.Url.ToString(), id = 2 }, new { @class = "dropdown-item" })
+                                        @Html.ActionLink("Assignee Manual", "Edit", "Manuals", new { prevPage = Request.Url.ToString(), id = 3 }, new { @class = "dropdown-item" })
+                                        @Html.ActionLink("Admin Manual", "Edit", "Manuals", new { prevPage = Request.Url.ToString(), id = 4 }, new { @class = "dropdown-item" })
+                                        @Html.ActionLink("Master Admin Manual", "Edit", "Manuals", new { prevPage = Request.Url.ToString(), id = 5 }, new { @class = "dropdown-item" })
+                                    }
+
                                 }
                                 else if (ViewBag.msg.Equals("user"))
                                 {
@@ -97,7 +105,7 @@
     </div>
     <div class="loadingDiv-parent">
         <div class="loadingDiv">
-              <i class="fas fa-spinner" style="font-size:3em;" aria-hidden="true"></i>
+            <i class="fas fa-spinner" style="font-size:3em;" aria-hidden="true"></i>
         </div>
     </div>
 </body>

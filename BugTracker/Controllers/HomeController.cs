@@ -4,6 +4,7 @@ using System.Web;
 using System.Web.Mvc;
 using BugTracker.Models;
 using BugTracker.Code;
+using System.Threading.Tasks;
 
 namespace BugTracker.Controllers
 {
@@ -16,10 +17,31 @@ namespace BugTracker.Controllers
             helper = new Helper(this);
         }
         // GET: Home
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            ViewBag.msg = helper.CheckCk();
-            return View();
+            string userType = helper.CheckCk();
+            ViewBag.msg = userType;
+            int id = 1;
+            if (userType.Equals("user"))
+            {
+                id = 2;
+            }
+            else if (userType.Equals("assignee"))
+            {
+                id = 3;
+            }
+            else if (userType.Equals("admin"))
+            {
+                if (ViewBag.adm.Equals("m"))
+                {
+                    id = 5;
+                }
+                else
+                {
+                    id = 4;
+                }
+            }
+            return View(await _db.Manuals.FindAsync(id));
         }
 
         public ActionResult Login()

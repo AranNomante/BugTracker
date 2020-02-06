@@ -101,7 +101,6 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Images\banner-background.png" />
-    <Content Include="Content\Images\bg.jpg" />
     <Content Include="Content\Images\button-background.png" />
     <Content Include="Content\Images\main-background.png" />
     <Content Include="Content\Images\newdotnetlogosmall.png" />
