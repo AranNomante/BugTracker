@@ -38,7 +38,7 @@ namespace BugTracker.Controllers
             string ustp = helper.CheckCk();
             if (!ustp.Equals("admin"))
             {
-                Response.Redirect("/Home");
+                return RedirectToAction("Index", "Home");
             }
             if (searchString != null)
             {
@@ -62,7 +62,7 @@ namespace BugTracker.Controllers
             string ustp = helper.CheckCk();
             if (!ustp.Equals("assignee"))
             {
-                Response.Redirect("/Home");
+                return RedirectToAction("Index", "Home");
             }
             ViewBag.msg = ustp;
             var data = _db.Bug.AsQueryable();
@@ -81,7 +81,7 @@ namespace BugTracker.Controllers
             string ustp = helper.CheckCk();
             if (!ustp.Equals("admin"))
             {
-                Response.Redirect("/Home");
+                return RedirectToAction("Index", "Home");
             }
             ViewBag.urlPrev = prevPage;
             ViewBag.msg = ustp;
@@ -97,7 +97,7 @@ namespace BugTracker.Controllers
             string ustp = helper.CheckCk();
             if (!ustp.Equals("admin"))
             {
-                Response.Redirect("/Home");
+                return RedirectToAction("Index", "Home");
             }
             ViewBag.urlPrev = prevPage;
             ViewBag.msg = ustp;
@@ -116,21 +116,21 @@ namespace BugTracker.Controllers
         public async Task<ActionResult> Edit(string id, string prevPage)
         {
             string ustp = helper.CheckCk();
-            if (!ustp.Equals("admin"))
+            if (!ustp.Equals("admin") && !ustp.Equals("assignee"))
             {
-                Response.Redirect("/Home");
+                return RedirectToAction("Index", "Home");
             }
             ViewBag.urlPrev = prevPage;
             ViewBag.msg = ustp;
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("BadReq", "Error");
             }
             id = String.Format("{0}.com", id);
             Assignee assignee = await _db.Assignee.FindAsync(id);
             if (assignee == null)
             {
-                return HttpNotFound();
+                return RedirectToAction("NotFound", "Error");
             }
             return View(assignee);
         }
@@ -142,9 +142,9 @@ namespace BugTracker.Controllers
         public async Task<ActionResult> Edit([Bind(Include = "email,password")] Assignee assignee, string prevPage)
         {
             string ustp = helper.CheckCk();
-            if (!ustp.Equals("admin"))
+            if (!ustp.Equals("admin") && !ustp.Equals("assignee"))
             {
-                Response.Redirect("/Home");
+                return RedirectToAction("Index", "Home");
             }
             ViewBag.urlPrev = prevPage;
             ViewBag.msg = ustp;
@@ -163,19 +163,19 @@ namespace BugTracker.Controllers
             string ustp = helper.CheckCk();
             if (!ustp.Equals("admin"))
             {
-                Response.Redirect("/Home");
+                return RedirectToAction("Index", "Home");
             }
             ViewBag.urlPrev = prevPage;
             ViewBag.msg = ustp;
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("BadReq", "Error");
             }
             id = String.Format("{0}.com", id);
             Assignee assignee = await _db.Assignee.FindAsync(id);
             if (assignee == null)
             {
-                return HttpNotFound();
+                return RedirectToAction("NotFound", "Error");
             }
             return View(assignee);
         }
@@ -187,7 +187,7 @@ namespace BugTracker.Controllers
             string ustp = helper.CheckCk();
             if (!ustp.Equals("admin"))
             {
-                Response.Redirect("/Home");
+                return RedirectToAction("Index", "Home");
             }
             id = String.Format("{0}.com", id);
             ViewBag.urlPrev = prevPage;

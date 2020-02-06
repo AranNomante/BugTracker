@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="1f1f29ade9c44d418bbe3d73f79f9c66" Name="Diagram1">
+      <Diagram DiagramId="1f1f29ade9c44d418bbe3d73f79f9c66" Name="Diagram1" ZoomLevel="70">
         <EntityTypeShape EntityType="BugTrackerModel.Admin" Width="1.5" PointX="2.75" PointY="5.75" IsExpanded="true" />
         <EntityTypeShape EntityType="BugTrackerModel.Assignee" Width="1.5" PointX="0.75" PointY="2.125" IsExpanded="true" />
         <EntityTypeShape EntityType="BugTrackerModel.Bug" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
@@ -13,6 +13,7 @@
         <AssociationConnector Association="BugTrackerModel.FK_Bug_Assignee" ManuallyRouted="false" />
         <AssociationConnector Association="BugTrackerModel.FK_Bug_User" ManuallyRouted="false" />
         <AssociationConnector Association="BugTrackerModel.FK_Image_Bug" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="BugTrackerModel.Manuals" Width="1.5" PointX="5.375" PointY="4.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

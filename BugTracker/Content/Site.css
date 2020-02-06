@@ -4,8 +4,8 @@ to use a different color start by replacing all instances of
 #5c87b2 with your new color.
 ----------------------------------------------------------*/
 body {
-    background-image: url("Images/bg.jpg");
-    background-color: #cccccc;
+    
+    background-color: #ffffff;
     background-attachment: fixed;
     background-position: center;
     background-repeat: no-repeat;
@@ -17,6 +17,7 @@ body {
     padding: 0;
     color: #595959;
 }
+
 /*  LOADING SPINNER  */
 .loadingDiv-parent {
     position: fixed;
@@ -70,13 +71,11 @@ body {
     width: 38px;
     border-radius: 90%;
 }
-text {
-   
-}
+
 textarea{
-    resize: vertical;
-    width: 500px;
-    height: 200px;
+    resize: both;
+    width: 400px;
+    height: 300px;
 }
 a:link
 {

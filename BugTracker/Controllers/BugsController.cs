@@ -92,25 +92,33 @@ namespace BugTracker.Controllers
             ViewBag.msg = helper.CheckCk();
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("BadReq", "Error");
             }
             Bug bug = await _db.Bug.FindAsync(id);
             if (bug == null)
             {
-                return HttpNotFound();
+                return RedirectToAction("NotFound", "Error");
             }
             Image[] imgs = (from im in _db.Image where im.id_bug == bug.id select im).DefaultIfEmpty(null).ToArray();
             String[] imstrs = null;
+            int[] imgid = null;
             if (imgs != null)
             {
+                imgid = new int[imgs.Length];
                 imstrs = new string[imgs.Length];
                 int i = 0;
                 foreach (Image img in imgs)
                 {
-                    imstrs[i] = FetchImgStr(img);
-                    i++;
+                    if (img != null)
+                    {
+                        imgid[i] = img.id;
+                        imstrs[i] = FetchImgStr(img);
+                        i++;
+                    }
+
                 }
             }
+            ViewBag.imgid = imgid;
             ViewBag.imgurl = imstrs;
             return View(bug);
         }
@@ -121,7 +129,7 @@ namespace BugTracker.Controllers
             string ustp = helper.CheckCk();
             if (!ustp.Equals("user"))
             {
-                Response.Redirect("/Home");
+                return RedirectToAction("Index", "Home");
             }
             ViewBag.urlPrev = prevPage;
             ViewBag.msg = ustp;
@@ -137,7 +145,7 @@ namespace BugTracker.Controllers
             string ustp = helper.CheckCk();
             if (!ustp.Equals("user"))
             {
-                Response.Redirect("/Home");
+                return RedirectToAction("Index", "Home");
             }
             ViewBag.urlPrev = prevPage;
             ViewBag.msg = ustp;
@@ -179,18 +187,18 @@ namespace BugTracker.Controllers
             string ustp = helper.CheckCk();
             if (!ustp.Equals("admin") && !ustp.Equals("assignee"))
             {
-                Response.Redirect("/Home");
+                return RedirectToAction("Index", "Home");
             }
             ViewBag.urlPrev = prevPage;
             ViewBag.msg = ustp;
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("BadReq", "Error");
             }
             Bug bug = await _db.Bug.FindAsync(id);
             if (bug == null)
             {
-                return HttpNotFound();
+                return RedirectToAction("NotFound", "Error");
             }
             List<SelectListItem> emails = new List<SelectListItem>();
             foreach (var item in await _db.Assignee.ToListAsync())
@@ -200,16 +208,23 @@ namespace BugTracker.Controllers
             //display img from imgdataurl
             Image[] imgs = (from im in _db.Image where im.id_bug == bug.id select im).DefaultIfEmpty(null).ToArray();
             String[] imstrs = null;
+            int[] imgid = null;
             if (imgs != null)
             {
+                imgid = new int[imgs.Length]; 
                 imstrs = new string[imgs.Length];
                 int i = 0;
                 foreach (Image img in imgs)
                 {
-                    imstrs[i] = FetchImgStr(img);
-                    i++;
+                    if (img != null)
+                    {
+                        imgid[i] = img.id;
+                        imstrs[i] = FetchImgStr(img);
+                        i++;
+                    }
                 }
             }
+            ViewBag.imgid = imgid;
             ViewBag.imgurl = imstrs;
             ViewBag.assignee = emails;
             ViewBag.submitter = bug.submitter;
@@ -225,7 +240,7 @@ namespace BugTracker.Controllers
             string ustp = helper.CheckCk();
             if (!ustp.Equals("admin") && !ustp.Equals("assignee"))
             {
-                Response.Redirect("/Home");
+                return RedirectToAction("Index", "Home");
             }
             ViewBag.urlPrev = prevPage;
             ViewBag.msg = ustp;
@@ -284,18 +299,18 @@ namespace BugTracker.Controllers
             string ustp = helper.CheckCk();
             if (!ustp.Equals("admin"))
             {
-                Response.Redirect("/Home");
+                return RedirectToAction("Index", "Home");
             }
             ViewBag.urlPrev = prevPage;
             ViewBag.msg = ustp;
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("BadReq", "Error");
             }
             Bug bug = await _db.Bug.FindAsync(id);
             if (bug == null)
             {
-                return HttpNotFound();
+                return RedirectToAction("NotFound", "Error");
             }
             return View(bug);
         }
@@ -307,7 +322,7 @@ namespace BugTracker.Controllers
             string ustp = helper.CheckCk();
             if (!ustp.Equals("admin"))
             {
-                Response.Redirect("/Home");
+                return RedirectToAction("Index", "Home");
             }
             ViewBag.urlPrev = prevPage;
             ViewBag.msg = ustp;
@@ -320,7 +335,54 @@ namespace BugTracker.Controllers
             }
             return View("Index");
         }
+        // GET: Bugs/Delete/5
+        public async Task<ActionResult> DeleteImg(int? id, string prevPage)
+        {
+            string ustp = helper.CheckCk();
+            if (!ustp.Equals("admin") && !ustp.Equals("assignee"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            ViewBag.urlPrev = prevPage;
+            ViewBag.msg = ustp;
+            if (id == null)
+            {
+                return RedirectToAction("BadReq", "Error");
+            }
+            Image img = await _db.Image.FindAsync(id);
+            if (img == null)
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
+            Bug b= (from bug in _db.Bug where bug.id == img.id_bug select bug).FirstOrDefault();
+            if (b != null)
+            {
+                ViewBag.imgasg = b.assignee;
+            }
+            ViewBag.imgurl = FetchImgStr(img);
+            return View(img);
+        }
 
+        // POST: Bugs/Delete/5
+        [HttpPost, ActionName("DeleteImg")]
+        public async Task<ActionResult> DeleteImgConfirmed(int? id, string prevPage)
+        {
+            string ustp = helper.CheckCk();
+            if (!ustp.Equals("admin") && !ustp.Equals("assignee"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            ViewBag.urlPrev = prevPage;
+            ViewBag.msg = ustp;
+            Image img = _db.Image.Find(id);
+            _db.Image.Remove(img);
+            int saved = await _db.SaveChangesAsync();
+            if (saved > 0)
+            {
+                Response.Redirect(prevPage);
+            }
+            return View("Index");
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -395,10 +457,6 @@ namespace BugTracker.Controllers
         }
         private string FetchImgStr(Image img)
         {
-            if (img == null)
-            {
-                return null;
-            }
             string imreBase64Data = Convert.ToBase64String(img.Data);
             string imgDataURL = string.Format("data:image/png;base64,{0}", imreBase64Data);
             return imgDataURL;

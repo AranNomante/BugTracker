@@ -255,4 +255,60 @@ $(function () {
             form.submit();
         }
     });
+    $("form[name='login']").validate({
+        // Specify validation rules
+        rules: {
+            // The key name on the left side is the name attribute
+            // of an input field. Validation rules are defined
+            // on the right side
+            Email: {
+                required: true,
+                email: true,
+                maxlength: 254
+            },
+            Password: {
+                required: true,
+                maxlength: 10
+            }
+        },
+        // Specify validation error messages
+        messages: {
+            Email: {
+                required: "Please enter an email",
+                email: "Please enter a valid email",
+                maxlength: "Email too long"
+            },
+            Password: {
+                required: "Please enter a password",
+                maxlength: "Password too long"
+            }
+        },
+        // Make sure the form is submitted to the destination defined
+        // in the "action" attribute of the form when valid
+        submitHandler: function (form) {
+            form.submit();
+        }
+    });
+    $("form[name='editman']").validate({
+        // Specify validation rules
+        rules: {
+            // The key name on the left side is the name attribute
+            // of an input field. Validation rules are defined
+            // on the right side
+            mantext: {
+                maxlength: 4000
+            }
+        },
+        // Specify validation error messages
+        messages: {
+            mantext: {
+                maxlength: "Manual is too long"
+            }
+        },
+        // Make sure the form is submitted to the destination defined
+        // in the "action" attribute of the form when valid
+        submitHandler: function (form) {
+            form.submit();
+        }
+    });
 });

@@ -16,6 +16,17 @@
     <script src="https://kit.fontawesome.com/e203b9c37b.js" crossorigin="anonymous"></script>
 </head>
 <body>
+    @{var tdata = TempData["ErStat"]; }
+    @if (tdata != null)
+    {
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>Holy guacamole!</strong> @tdata
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        TempData.Remove("ErStat");
+    }
     <div class="container">
 
         <nav class="navbar navbar-expand-lg navbar-light bg-primary">
@@ -46,18 +57,28 @@
                                 {
 
                                     @Html.ActionLink("Admins", "Index", "Admins", null, new { @class = "dropdown-item" })
-                                    <div class="dropdown-divider"></div>
-
                                     @Html.ActionLink("Assignees", "Index", "Assignees", null, new { @class = "dropdown-item" })
                                     @Html.ActionLink("Users", "Index", "Users", null, new { @class = "dropdown-item" })
+                                    if (ViewBag.adm.Equals("m"))
+                                    {
+                                        <div class="dropdown-divider"></div>
+                                        @Html.ActionLink("Non-User Manual", "Edit", "Manuals", new { prevPage = Request.Url.ToString(), id = 1 }, new { @class = "dropdown-item" })
+                                        @Html.ActionLink("User Manual", "Edit", "Manuals", new { prevPage = Request.Url.ToString(), id = 2 }, new { @class = "dropdown-item" })
+                                        @Html.ActionLink("Assignee Manual", "Edit", "Manuals", new { prevPage = Request.Url.ToString(), id = 3 }, new { @class = "dropdown-item" })
+                                        @Html.ActionLink("Admin Manual", "Edit", "Manuals", new { prevPage = Request.Url.ToString(), id = 4 }, new { @class = "dropdown-item" })
+                                        @Html.ActionLink("Master Admin Manual", "Edit", "Manuals", new { prevPage = Request.Url.ToString(), id = 5 }, new { @class = "dropdown-item" })
+                                    }
+
                                 }
                                 else if (ViewBag.msg.Equals("user"))
                                 {
-                                    @Html.ActionLink("User", "Stats", "Users", null, new { @class = "dropdown-item" })
+                                    @Html.ActionLink("User Stats", "Stats", "Users", null, new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Change Password", "Edit", "Users",new {prevPage = Request.Url.ToString(), id=ViewBag.clrusr.Split('.')[0] }, new { @class = "dropdown-item" })
                                 }
                                 else
                                 {
-                                    @Html.ActionLink("Assignee", "Stats", "Assignees", null, new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Assignee Stats", "Stats", "Assignees", null, new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Change Password", "Edit", "Assignees", new {prevPage = Request.Url.ToString(), id=ViewBag.clrassignee.Split('.')[0] }, new { @class = "dropdown-item" })
                                 }
                             </div>
                         </li>
@@ -84,13 +105,9 @@
     <div class="container top-buffer">
         <footer>Altug Ceylan 2020</footer>
     </div>
-        <div class="loadingDiv-parent">
+    <div class="loadingDiv-parent">
         <div class="loadingDiv">
-            <div class="card border-success ">
-                <div class="card-body bg-primary">
-                    <i class="fas fa-spinner"style="font-size:5em;" aria-hidden="true" ></i>
-                </div>
-            </div>
+            <i class="fab fa-algolia" style="font-size:3em;" aria-hidden="true"></i>
         </div>
     </div>
 </body>

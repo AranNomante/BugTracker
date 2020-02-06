@@ -21,24 +21,24 @@
                 </th>
                 <th>
                     <p class="text-secondary"> State</p>
-</th>
+                </th>
                 <th>
                     <p class="text-secondary">Submit Time</p>
-</th>
+                </th>
                 <th>
                     <p class="text-secondary">Version</p>
-</th>
+                </th>
                 <th>
                     <p class="text-secondary">Fix Time</p>
-</th>
+                </th>
                 @if (!ViewBag.msg.Equals("user") && !ViewBag.msg.Equals("no"))
                 {
                     <th>
                         <p class="text-secondary"> Assignee Email</p>
-</th>
+                    </th>
                     <th>
                         <p class="text-secondary">User Email</p>
-</th>
+                    </th>
                 }
 
             </tr>
@@ -75,7 +75,7 @@
         <table>
             <tr>
                 <th>
-                   <p class="text-secondary"> User Description </p>
+                    <p class="text-secondary"> User Description </p>
                 </th>
                 <th>
                     <p class="text-secondary">Fix Description </p>
@@ -99,24 +99,22 @@
     </div>
 </div>
 
-<div class="row top-buffer col-md-12">
-    <div class="col col-md-12">
-        @if (ViewBag.imgurl != null)
+@if (ViewBag.imgurl != null)
+{
+    foreach (String s in ViewBag.imgurl)
+    {
+        if (s != null)
         {
-            foreach (String s in ViewBag.imgurl)
-            {
-                if (s != null)
-                {
+            <div class="row col-md-12 top-buffer">
+                <div class="col col-md-12">
                     <img src="@s" class="img-fluid" alt="Responsive image" />
-                }
-            }
+                </div>
+            </div>
         }
-        else
-        {
-            <p>No Screenshot</p>
-        }
-    </div>
-</div>
+    }
+}
+
+
 <div class="row top-buffer text-center col-md-12">
 
 
@@ -127,7 +125,7 @@
                 <a href="@ViewBag.urlPrev" class="btn btn-outline-primary">Previous Page</a>
             </div>
             <div class="col col-md-6">
-                @Html.ActionLink("Edit", "Edit", new { id = Model.title, prevPage = Request.Url.ToString() }, new { @class = "btn btn-outline-primary" })
+                @Html.ActionLink("Edit", "Edit", new { id = Model.id, prevPage = Request.Url.ToString() }, new { @class = "btn btn-outline-primary" })
             </div>
         }
         else
@@ -143,7 +141,7 @@
             <a href="@ViewBag.urlPrev" class="btn btn-outline-primary">Previous Page</a>
         </div>
     }
-    
+
 
 
 </div>

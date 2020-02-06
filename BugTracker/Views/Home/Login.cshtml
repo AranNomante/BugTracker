@@ -4,26 +4,43 @@
     ViewBag.Title = "Login";
 
 }
-    
-        <div class="row top-buffer col-md-12">
-            <div class="col col-md-12">
-                <h3 class="display-4">Login</h3>
-            </div>
+
+<div class="row top-buffer col-md-12">
+    <div class="col col-md-12">
+        <h3 class="display-4">Login</h3>
+    </div>
+</div>
+
+@using (Html.BeginForm("Verify", "Home", FormMethod.Post, new { name = "login" }))
+{
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="row col-md-12">
+        <div class="col col-md-12">
+            <p class="text-secondary">Email address</p>
+            @Html.TextBoxFor(m => m.Email, new { htmlAttributes = new { @class = "form-control", placeholder = "email@example.com", name = "Email" } })
+            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
         </div>
-        <div class="row top-buffer col-md-12">
-            @using (Html.BeginForm("Verify", "Home", FormMethod.Post))
-            {
-                <div class="col col-md-12">
-                    <label class="text-secondary" for="exampleInputEmail1">Email address</label>
-                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @id = "exampleInputEmail1", @placeholder = "email@example.com" })
-                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-                </div>
-                <div class="col col-md-12 top-buffer">
-                    <label class="text-secondary" for="exampleInputPassword1">Password</label>
-                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", @id = "exampleInputPassword1", @placeholder = "Password" })
-                </div>
-                <div class="col col-md-12 top-buffer text-right">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
-            }
+
+    </div>
+    <div class="row col-md-12">
+        <div class="col col-md-12">
+            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
         </div>
+    </div>
+    <div class="row col-md-12 top-buffer">
+        <div class="col col-md-12">
+            <p class="text-secondary">Password</p>
+            @Html.PasswordFor(m => m.Password, new { htmlAttributes = new { @class = "form-control", placeholder = "Password", name = "Password" } })
+        </div>
+    </div>
+    <div class="row col-md-12">
+        <div class="col col-md-12">
+            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="row col-md-12 top-buffer text-left">
+        <div class="col col-md-12">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+}
