@@ -30,5 +30,6 @@ namespace BugTracker.Models
         public virtual DbSet<Bug> Bug { get; set; }
         public virtual DbSet<Image> Image { get; set; }
         public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<Manuals> Manuals { get; set; }
     }
 }
