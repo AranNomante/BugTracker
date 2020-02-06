@@ -29,6 +29,11 @@ namespace BugTracker.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
+            var id = TempData["manid"];
+            if (id != null)
+            {
+                ViewBag.manid = id;
+            }
             ViewBag.msg = ustp;
             return View();
         }
@@ -67,12 +72,13 @@ namespace BugTracker.Controllers
             ViewBag.msg = ustp;
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("BadReq", "Error");
             }
             Manuals manuals = await _db.Manuals.FindAsync(id);
             if (manuals == null)
             {
-                return HttpNotFound();
+                TempData["manid"] = id;
+                return RedirectToAction("Create");
             }
             return View(manuals);
         }
@@ -110,12 +116,12 @@ namespace BugTracker.Controllers
             ViewBag.msg = ustp;
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("BadReq", "Error");
             }
             Manuals manuals = await _db.Manuals.FindAsync(id);
             if (manuals == null)
             {
-                return HttpNotFound();
+                return RedirectToAction("NotFound", "Error");
             }
             return View(manuals);
         }
