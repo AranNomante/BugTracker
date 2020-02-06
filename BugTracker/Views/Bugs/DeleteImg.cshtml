@@ -1,6 +1,6 @@
 ﻿@model BugTracker.Models.Image
 
-@if (ViewBag.msg.Equals("admin") || ViewBag.msg.Equals("assignee"))
+@if (ViewBag.msg.Equals("admin") || (ViewBag.msg.Equals("assignee") && (ViewBag.imgasg!=null && ViewBag.imgasg.Equals(ViewBag.clrassignee)) ))
 {
     <div class="row col-md-12 top-buffer">
         <div class="col col-md-12">

@@ -354,6 +354,11 @@ namespace BugTracker.Controllers
             {
                 return RedirectToAction("NotFound", "Error");
             }
+            Bug b= (from bug in _db.Bug where bug.id == img.id_bug select bug).FirstOrDefault();
+            if (b != null)
+            {
+                ViewBag.imgasg = b.assignee;
+            }
             ViewBag.imgurl = FetchImgStr(img);
             return View(img);
         }
