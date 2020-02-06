@@ -7,8 +7,8 @@
 
     @using (Html.BeginForm()) 
     {
-        @Html.AntiForgeryToken()
         
+        @Html.HiddenFor(model => model.id,new { Value="@ViewBag.manid" })
         <div class="form-horizontal">
             <h4>Manuals</h4>
             <hr />
