@@ -115,7 +115,7 @@ namespace BugTracker.Controllers
         public async Task<ActionResult> Edit(string id, string prevPage)
         {
             string ustp = helper.CheckCk();
-            if (!ustp.Equals("admin"))
+            if (!ustp.Equals("admin") && !ustp.Equals("user"))
             {
                 return RedirectToAction("Index", "Home");
             }
@@ -141,7 +141,7 @@ namespace BugTracker.Controllers
         public async Task<ActionResult> Edit([Bind(Include = "email,password")] User user, string prevPage)
         {
             string ustp = helper.CheckCk();
-            if (!ustp.Equals("admin"))
+            if (!ustp.Equals("admin") && !ustp.Equals("user"))
             {
                 return RedirectToAction("Index", "Home");
             }
