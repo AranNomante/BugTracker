@@ -49,7 +49,7 @@
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="text" Type="nvarchar" MaxLength="4000" />
         </EntityType>
         <EntityType Name="User">
