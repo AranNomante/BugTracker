@@ -234,9 +234,7 @@
     <Content Include="Views\Bugs\DeleteImg.cshtml" />
     <Content Include="Views\Manuals\Create.cshtml" />
     <Content Include="Views\Manuals\Delete.cshtml" />
-    <Content Include="Views\Manuals\Details.cshtml" />
     <Content Include="Views\Manuals\Edit.cshtml" />
-    <Content Include="Views\Manuals\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

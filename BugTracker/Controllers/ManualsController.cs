@@ -19,32 +19,17 @@ namespace BugTracker.Controllers
         {
             helper = new Helper(this);
         }
-        // GET: Manuals
-        public async Task<ActionResult> Index()
-        {
-            string ustp = helper.CheckCk();
-            ViewBag.msg = ustp;
-            return View(await _db.Manuals.ToListAsync());
-        }
 
-        // GET: Manuals/Details/5
-        public async Task<ActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Manuals manuals = await _db.Manuals.FindAsync(id);
-            if (manuals == null)
-            {
-                return HttpNotFound();
-            }
-            return View(manuals);
-        }
-
+  
         // GET: Manuals/Create
         public ActionResult Create()
         {
+            string ustp = helper.CheckCk();
+            if (!ustp.Equals("admin") && !ViewBag.adm == "m")
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            ViewBag.msg = ustp;
             return View();
         }
 
@@ -55,11 +40,17 @@ namespace BugTracker.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "id,text")] Manuals manuals)
         {
+            string ustp = helper.CheckCk();
+            if (!ustp.Equals("admin") && !ViewBag.adm == "m")
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            ViewBag.msg = ustp;
             if (ModelState.IsValid)
             {
                 _db.Manuals.Add(manuals);
                 await _db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index","Home");
             }
 
             return View(manuals);
@@ -68,6 +59,12 @@ namespace BugTracker.Controllers
         // GET: Manuals/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
+            string ustp = helper.CheckCk();
+            if (!ustp.Equals("admin") && !ViewBag.adm == "m")
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            ViewBag.msg = ustp;
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -87,11 +84,17 @@ namespace BugTracker.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "id,text")] Manuals manuals)
         {
+            string ustp = helper.CheckCk();
+            if (!ustp.Equals("admin") && !ViewBag.adm == "m")
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            ViewBag.msg = ustp;
             if (ModelState.IsValid)
             {
                 _db.Entry(manuals).State = EntityState.Modified;
                 await _db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index","Home");
             }
             return View(manuals);
         }
@@ -99,6 +102,12 @@ namespace BugTracker.Controllers
         // GET: Manuals/Delete/5
         public async Task<ActionResult> Delete(int? id)
         {
+            string ustp = helper.CheckCk();
+            if (!ustp.Equals("admin") && !ViewBag.adm == "m")
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            ViewBag.msg = ustp;
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -116,10 +125,16 @@ namespace BugTracker.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
+            string ustp = helper.CheckCk();
+            if (!ustp.Equals("admin") && !ViewBag.adm == "m")
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            ViewBag.msg = ustp;
             Manuals manuals = await _db.Manuals.FindAsync(id);
             _db.Manuals.Remove(manuals);
             await _db.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index","Home");
         }
 
         protected override void Dispose(bool disposing)
