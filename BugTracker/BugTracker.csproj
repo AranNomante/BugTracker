@@ -232,8 +232,6 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\Bugs\DeleteImg.cshtml" />
-    <Content Include="Views\Manuals\Create.cshtml" />
-    <Content Include="Views\Manuals\Delete.cshtml" />
     <Content Include="Views\Manuals\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

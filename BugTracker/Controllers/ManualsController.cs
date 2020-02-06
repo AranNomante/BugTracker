@@ -20,51 +20,12 @@ namespace BugTracker.Controllers
             helper = new Helper(this);
         }
 
-  
-        // GET: Manuals/Create
-        public ActionResult Create()
-        {
-            string ustp = helper.CheckCk();
-            if (!ustp.Equals("admin") && !ViewBag.adm == "m")
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            var id = TempData["manid"];
-            if (id != null)
-            {
-                ViewBag.manid = id;
-            }
-            ViewBag.msg = ustp;
-            return View();
-        }
-
-        // POST: Manuals/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        public async Task<ActionResult> Create([Bind(Include = "id,text")] Manuals manuals)
-        {
-            string ustp = helper.CheckCk();
-            if (!ustp.Equals("admin") && !ViewBag.adm == "m")
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            ViewBag.msg = ustp;
-            if (ModelState.IsValid)
-            {
-                _db.Manuals.Add(manuals);
-                await _db.SaveChangesAsync();
-                return RedirectToAction("Index","Home");
-            }
-
-            return View(manuals);
-        }
 
         // GET: Manuals/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
             string ustp = helper.CheckCk();
-            if (!ustp.Equals("admin") && !ViewBag.adm == "m")
+            if (!ustp.Equals("admin") )
             {
                 return RedirectToAction("Index", "Home");
             }
@@ -76,8 +37,7 @@ namespace BugTracker.Controllers
             Manuals manuals = await _db.Manuals.FindAsync(id);
             if (manuals == null)
             {
-                TempData["manid"] = id;
-                return RedirectToAction("Create");
+                return RedirectToAction("NotFound","Error");
             }
             return View(manuals);
         }
@@ -89,7 +49,7 @@ namespace BugTracker.Controllers
         public async Task<ActionResult> Edit([Bind(Include = "id,text")] Manuals manuals)
         {
             string ustp = helper.CheckCk();
-            if (!ustp.Equals("admin") && !ViewBag.adm == "m")
+            if (!ustp.Equals("admin"))
             {
                 return RedirectToAction("Index", "Home");
             }
@@ -102,44 +62,6 @@ namespace BugTracker.Controllers
             }
             return View(manuals);
         }
-
-        // GET: Manuals/Delete/5
-        public async Task<ActionResult> Delete(int? id)
-        {
-            string ustp = helper.CheckCk();
-            if (!ustp.Equals("admin") && !ViewBag.adm == "m")
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            ViewBag.msg = ustp;
-            if (id == null)
-            {
-                return RedirectToAction("BadReq", "Error");
-            }
-            Manuals manuals = await _db.Manuals.FindAsync(id);
-            if (manuals == null)
-            {
-                return RedirectToAction("NotFound", "Error");
-            }
-            return View(manuals);
-        }
-
-        // POST: Manuals/Delete/5
-        [HttpPost, ActionName("Delete")]
-        public async Task<ActionResult> DeleteConfirmed(int id)
-        {
-            string ustp = helper.CheckCk();
-            if (!ustp.Equals("admin") && !ViewBag.adm == "m")
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            ViewBag.msg = ustp;
-            Manuals manuals = await _db.Manuals.FindAsync(id);
-            _db.Manuals.Remove(manuals);
-            await _db.SaveChangesAsync();
-            return RedirectToAction("Index","Home");
-        }
-
         protected override void Dispose(bool disposing)
         {
             if (disposing)
